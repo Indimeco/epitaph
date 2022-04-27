@@ -1,0 +1,21 @@
+@import "reset.css";
+
+html,
+body,
+#background {
+    height: 100%;
+    width: 100%;
+}
+
+#background {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: black;
+}
+
+#book {
+    width: 900px;
+    height: 700px;
+    background-color: gray;
+}
