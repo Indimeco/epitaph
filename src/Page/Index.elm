@@ -1,15 +1,17 @@
-module Page.Index exposing (Data, Model, Msg, page)
+module Page.Index exposing (Data, Model, Msg, page, timestringToDate)
 
 import DataSource exposing (DataSource)
 import DataSource.File
 import Head
 import Head.Seo as Seo
 import Html exposing (Html, div, text)
+import Html.Attributes exposing (class)
 import List exposing (map)
 import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
+import Regex exposing (Regex)
 import Shared
 import View exposing (View)
 
@@ -72,11 +74,25 @@ head static =
         |> Seo.website
 
 
-markdownToView : String -> List (Html msg)
-markdownToView markdownString =
+markdownToHtml : String -> List (Html msg)
+markdownToHtml markdownString =
     markdownString
         |> String.split "\n"
-        |> map (\line -> div [] [ text line ])
+        |> map (\line -> div [ class "line" ] [ text line ])
+
+
+timestringRegex : Regex
+timestringRegex =
+    Maybe.withDefault Regex.never <| Regex.fromString "^\\d\\d\\d\\d\\-\\d\\d\\-\\d\\d"
+
+
+timestringToDate : String -> String
+timestringToDate timestring =
+    timestring
+        |> Regex.find timestringRegex
+        |> map .match
+        |> List.head
+        |> Maybe.withDefault "undated"
 
 
 view :
@@ -88,8 +104,8 @@ view maybeUrl sharedModel static =
     { title = "test"
     , body =
         [ div []
-            [ div [] [ text static.data.date ]
-            , div [] (markdownToView static.data.body)
+            [ div [ class "date" ] [ text (timestringToDate static.data.date) ]
+            , div [ class "poem" ] (markdownToHtml static.data.body)
             ]
         ]
     }
