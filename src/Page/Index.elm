@@ -1,9 +1,11 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
 import DataSource exposing (DataSource)
+import DataSource.File
 import Head
 import Head.Seo as Seo
 import Html exposing (Html, button, div, text)
+import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -34,7 +36,19 @@ page =
 
 data : DataSource Data
 data =
-    DataSource.succeed ()
+    DataSource.File.bodyWithFrontmatter poemDecoder "content/poems/2021-04-05.md"
+
+
+type alias Data =
+    { body : String
+    , date : String
+    }
+
+
+poemDecoder : String -> Decoder Data
+poemDecoder body =
+    OptimizedDecoder.map (Data body)
+        (OptimizedDecoder.field "created" OptimizedDecoder.string)
 
 
 head :
@@ -57,10 +71,6 @@ head static =
         |> Seo.website
 
 
-type alias Data =
-    ()
-
-
 urlString : Maybe PageUrl -> String
 urlString maybePageUrl =
     case maybePageUrl of
@@ -80,9 +90,9 @@ view maybeUrl sharedModel static =
     { title = "test"
     , body =
         [ div []
-            [ button [] [ text "-" ]
-            , div [] [ text (urlString maybeUrl) ]
-            , button [] [ text "+" ]
+            [ div [] [ text (urlString maybeUrl) ]
+            , div [] [ text static.data.date ]
+            , div [] [ text static.data.body ]
             ]
         ]
     }
