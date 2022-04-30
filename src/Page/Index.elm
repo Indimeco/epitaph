@@ -4,7 +4,8 @@ import DataSource exposing (DataSource)
 import DataSource.File
 import Head
 import Head.Seo as Seo
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, div, text)
+import List exposing (map)
 import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
@@ -71,14 +72,11 @@ head static =
         |> Seo.website
 
 
-urlString : Maybe PageUrl -> String
-urlString maybePageUrl =
-    case maybePageUrl of
-        Nothing ->
-            "nah"
-
-        Just pageUrl ->
-            "lol"
+markdownToView : String -> List (Html msg)
+markdownToView markdownString =
+    markdownString
+        |> String.split "\n"
+        |> map (\line -> div [] [ text line ])
 
 
 view :
@@ -90,9 +88,8 @@ view maybeUrl sharedModel static =
     { title = "test"
     , body =
         [ div []
-            [ div [] [ text (urlString maybeUrl) ]
-            , div [] [ text static.data.date ]
-            , div [] [ text static.data.body ]
+            [ div [] [ text static.data.date ]
+            , div [] (markdownToView static.data.body)
             ]
         ]
     }
