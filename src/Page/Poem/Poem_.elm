@@ -30,10 +30,14 @@ type alias RouteParams =
     }
 
 
+poemPath =
+    "content/poems/"
+
+
 page : Page RouteParams Data
 page =
     Page.prerender
-        { head = head -- TODO don't know why this is wrong, type error prob caused by somewhere else, see https://github.com/dillonkearns/elm-pages/blob/master/examples/docs/src/Page/Docs/Section__.elm
+        { head = head
         , routes = pages
         , data = data
         }
@@ -56,26 +60,17 @@ pages =
 poems : DataSource (List String)
 poems =
     Glob.succeed (\slug -> slug)
-        |> Glob.match (Glob.literal "content/poems/")
+        |> Glob.match (Glob.literal poemPath)
         |> Glob.capture Glob.wildcard
         |> Glob.match (Glob.literal ".md")
         |> Glob.toDataSource
 
 
-findBySlug : String -> String -> DataSource String
-findBySlug path slug =
-    Glob.succeed identity
-        |> Glob.captureFilePath
-        |> Glob.match (Glob.literal path)
-        |> Glob.match (Glob.literal slug)
-        |> Glob.match (Glob.literal ".md")
-        |> Glob.expectUniqueMatch
-
-
 data : RouteParams -> DataSource Data
 data params =
     params.poem
-        |> (++) "content/poems/"
+        |> (++) poemPath
+        |> (\s -> s ++ ".md")
         |> DataSource.File.bodyWithFrontmatter poemDecoder
 
 
