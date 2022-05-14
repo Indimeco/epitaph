@@ -1,5 +1,24 @@
 @import "reset.css";
 
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --color-bg: #ffffff;
+    --color-fg: #222222;
+    --color-fg-lighter: #646165;
+    --color-page: #fffbf4;
+    --color-dark-sienna: #38040E;
+    --color-olive: #596F43;
+    --color-olive-lighter: #688E26;
+}
+
+html {
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--color-fg);
+}
+
 html,
 body,
 #background {
@@ -11,11 +30,33 @@ body,
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: black;
+    background-color: var(--color-bg);
 }
 
 #book {
     width: 900px;
     height: 700px;
-    background-color: gray;
+    background-color: var(--color-page);
+    padding: 56px;
+}
+
+/* POEM PAGE */
+
+.poem {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.poem .line {
+    margin-bottom: 16px;
+}
+
+.poem .blank-line {
+    /* TODO need space */
+}
+
+.date {
+    font-size: 16px;
+    color: var(--color-fg-lighter);
+    margin-bottom: 48px;
 }
