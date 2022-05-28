@@ -34,7 +34,7 @@ body,
 }
 
 #book {
-    width: 900px;
+    width: 980px;
     height: 700px;
     background-color: var(--color-page);
     padding: 56px;
@@ -45,6 +45,7 @@ body,
 .poem {
     font-size: 24px;
     line-height: 1;
+    white-space: break-spaces;
 }
 
 .poem .line {
