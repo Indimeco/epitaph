@@ -92,7 +92,7 @@ head :
 head static =
     Seo.summary
         { canonicalUrlOverride = Nothing
-        , siteName = "elm-pages"
+        , siteName = "repertoire"
         , image =
             { url = Pages.Url.external "TODO"
             , alt = "elm-pages logo"
@@ -110,7 +110,26 @@ markdownToHtml : String -> List (Html msg)
 markdownToHtml markdownString =
     markdownString
         |> String.split "\n"
-        |> map (\line -> div [ class "line" ] [ text line ])
+        |> List.filter (\t -> String.isEmpty t |> not)
+        |> (\list ->
+                case list of
+                    [] ->
+                        []
+
+                    x :: xs ->
+                        let
+                            title =
+                                [ if String.startsWith "#" x then
+                                    x
+                                        |> String.replace "# " ""
+                                        |> (\t -> div [ class "title" ] [ text t ])
+
+                                  else
+                                    div [ class "title" ] [ text "untitled" ]
+                                ]
+                        in
+                        List.append title (map (\line -> div [ class "line" ] [ text line ]) xs)
+           )
 
 
 timestringRegex : Regex
