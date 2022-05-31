@@ -1,4 +1,5 @@
 @import "reset.css";
+@import "poem.css";
 
 * {
     box-sizing: border-box;
@@ -38,26 +39,4 @@ body,
     height: 700px;
     background-color: var(--color-page);
     padding: 56px;
-}
-
-/* POEM PAGE */
-
-.poem {
-    font-size: 24px;
-    line-height: 1;
-    white-space: break-spaces;
-}
-
-.poem .line {
-    margin-bottom: 16px;
-}
-
-.poem .blank-line {
-    /* TODO need space */
-}
-
-.date {
-    font-size: 16px;
-    color: var(--color-fg-lighter);
-    margin-bottom: 48px;
 }

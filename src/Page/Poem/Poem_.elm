@@ -106,30 +106,48 @@ head static =
         |> Seo.website
 
 
+poemNode : String -> Html msg
+poemNode lineText =
+    if String.startsWith "# " lineText then
+        lineText
+            |> String.replace "# " ""
+            |> (\t -> div [ class "title" ] [ text t ])
+
+    else if String.isEmpty lineText then
+        div [ class "blank-line" ] []
+
+    else
+        div [ class "line" ] [ text lineText ]
+
+
+
+-- FIXME incomplete function
+
+
+filterPoemTrailingBlanks : List (Html msg) -> List (Html msg)
+filterPoemTrailingBlanks list =
+    case list of
+        [] ->
+            []
+
+        x :: xs ->
+            if x == "title" && List.head xs == "blank-line" then
+                -- remove blank line
+                xs
+
+            else if List.tail xs == "blank-line" then
+                -- remove blank line
+                xs
+
+            else
+                xs
+
+
 markdownToHtml : String -> List (Html msg)
 markdownToHtml markdownString =
     markdownString
         |> String.split "\n"
-        |> List.filter (\t -> String.isEmpty t |> not)
-        |> (\list ->
-                case list of
-                    [] ->
-                        []
-
-                    x :: xs ->
-                        let
-                            title =
-                                [ if String.startsWith "#" x then
-                                    x
-                                        |> String.replace "# " ""
-                                        |> (\t -> div [ class "title" ] [ text t ])
-
-                                  else
-                                    div [ class "title" ] [ text "untitled" ]
-                                ]
-                        in
-                        List.append title (map (\line -> div [ class "line" ] [ text line ]) xs)
-           )
+        |> List.map poemNode
 
 
 timestringRegex : Regex

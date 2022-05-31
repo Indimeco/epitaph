@@ -1,0 +1,27 @@
+.poem {
+    --font-size-body: 24px;
+    line-height: 1;
+    white-space: break-spaces;
+    font-size: var(--font-size-body);
+}
+
+.poem .line {
+    margin-bottom: 16px;
+}
+
+.poem .title {
+    padding-bottom: 8px;
+    margin-bottom: 48px;
+    box-shadow: 0 1px 1px -1px black;
+}
+
+.poem .blank-line {
+    height: var(--font-size-body);
+}
+
+.date {
+    font-size: 16px;
+    color: var(--color-fg-lighter);
+    margin-bottom: 48px;
+    text-align: right;
+}
