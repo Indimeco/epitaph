@@ -31,12 +31,11 @@ body,
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--color-bg);
+    background-color: var(--color-page);
 }
 
 #book {
     width: 980px;
     height: 700px;
-    background-color: var(--color-page);
     padding: 56px;
 }

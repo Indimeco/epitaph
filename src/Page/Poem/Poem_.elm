@@ -122,25 +122,20 @@ poemNode lineText =
 
 
 -- FIXME incomplete function
-
-
-filterPoemTrailingBlanks : List (Html msg) -> List (Html msg)
-filterPoemTrailingBlanks list =
-    case list of
-        [] ->
-            []
-
-        x :: xs ->
-            if x == "title" && List.head xs == "blank-line" then
-                -- remove blank line
-                xs
-
-            else if List.tail xs == "blank-line" then
-                -- remove blank line
-                xs
-
-            else
-                xs
+-- filterPoemTrailingBlanks : List (Html msg) -> List (Html msg)
+-- filterPoemTrailingBlanks list =
+--     case list of
+--         [] ->
+--             []
+--         x :: xs ->
+--             if x == "title" && List.head xs == "blank-line" then
+--                 -- remove blank line
+--                 xs
+--             else if List.tail xs == "blank-line" then
+--                 -- remove blank line
+--                 xs
+--             else
+--                 xs
 
 
 markdownToHtml : String -> List (Html msg)
