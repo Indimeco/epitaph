@@ -111,8 +111,8 @@ view maybeUrl sharedModel static =
     { title = "test"
     , body =
         [ div []
-            [ div [ class "date" ] [ text (timestringToDate static.data.date) ]
-            , div [ class "poem" ] (markdownToPoemHtml static.data.body)
+            [ div [ class "poem__date" ] [ text (timestringToDate static.data.date) ]
+            , div [ class "poem__body" ] (markdownToPoemHtml static.data.body)
             ]
         ]
     }
@@ -129,10 +129,10 @@ poemNodeToHtml : PoemNode -> Html msg
 poemNodeToHtml node =
     case node of
         BlankLine ->
-            div [ class "blank-line" ] []
+            div [ class "poem__body__blankline" ] []
 
         Line t ->
-            div [ class "line" ] [ text t ]
+            div [ class "poem__body__line" ] [ text t ]
 
         Title t ->
-            h2 [ class "title" ] [ text t ]
+            h2 [ class "poem__body__title" ] [ text t ]

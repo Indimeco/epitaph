@@ -1,4 +1,4 @@
-.poem {
+.poem__body {
     --font-size-body: 24px;
     line-height: 1;
     white-space: break-spaces;
@@ -6,21 +6,21 @@
     margin-top: 40px;
 }
 
-.poem .line {
+.poem__body__line {
     margin-bottom: 16px;
 }
 
-.poem .title {
+.poem__body__title {
     margin-bottom: 24px;
     font-weight: bold;
     color: var(--color-dark-sienna)
 }
 
-.poem .blank-line {
+.poem__body__blankline {
     height: var(--font-size-body);
 }
 
-.date {
+.poem__date {
     font-size: 16px;
     color: var(--color-olive-lighter);
     margin-bottom: 16px;

@@ -2,11 +2,14 @@
 SECTION Dev
 TODO next and back buttons for poems
 TODO add long poem and test
+TODO poem not found page
+TODO poem title as page title
 
 
 SECTION Design
 TODO design index page with all poems
 TODO design landmark title/watermark
+TODO page meta (favico, title, etc)
 
 SECTION Ops
 TODO hosting
