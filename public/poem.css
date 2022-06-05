@@ -3,6 +3,7 @@
     line-height: 1;
     white-space: break-spaces;
     font-size: var(--font-size-body);
+    margin-top: 40px;
 }
 
 .poem .line {
@@ -10,8 +11,7 @@
 }
 
 .poem .title {
-    padding-bottom: 8px;
-    margin-bottom: 48px;
+    margin-bottom: 24px;
     font-weight: bold;
     color: var(--color-dark-sienna)
 }
@@ -23,5 +23,5 @@
 .date {
     font-size: 16px;
     color: var(--color-olive-lighter);
-    text-align: left;
+    margin-bottom: 16px;
 }

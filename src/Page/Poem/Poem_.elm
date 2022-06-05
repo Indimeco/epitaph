@@ -1,13 +1,13 @@
-module Page.Poem.Poem_ exposing (Data, Model, Msg, page, timestringToDate)
+module Page.Poem.Poem_ exposing (Data, Model, Msg, PoemNode(..), markdownToPoemNodes, page, timestringToDate)
 
 import DataSource exposing (DataSource)
 import DataSource.File
 import DataSource.Glob as Glob
 import Head
 import Head.Seo as Seo
-import Html exposing (Html, div, text)
+import Html exposing (Html, div, h2, text)
 import Html.Attributes exposing (class)
-import List exposing (map)
+import List exposing (foldl, map)
 import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
@@ -30,6 +30,7 @@ type alias RouteParams =
     }
 
 
+poemPath : String
 poemPath =
     "content/poems/"
 
@@ -106,43 +107,78 @@ head static =
         |> Seo.website
 
 
-poemNode : String -> Html msg
-poemNode lineText =
-    if String.startsWith "# " lineText then
-        lineText
-            |> String.replace "# " ""
-            |> (\t -> div [ class "title" ] [ text t ])
-
-    else if String.isEmpty lineText then
-        div [ class "blank-line" ] []
-
-    else
-        div [ class "line" ] [ text lineText ]
-
-
-
--- FIXME incomplete function
--- filterPoemTrailingBlanks : List (Html msg) -> List (Html msg)
--- filterPoemTrailingBlanks list =
---     case list of
---         [] ->
---             []
---         x :: xs ->
---             if x == "title" && List.head xs == "blank-line" then
---                 -- remove blank line
---                 xs
---             else if List.tail xs == "blank-line" then
---                 -- remove blank line
---                 xs
---             else
---                 xs
+view :
+    Maybe PageUrl
+    -> Shared.Model
+    -> StaticPayload Data RouteParams
+    -> View Msg
+view maybeUrl sharedModel static =
+    { title = "test"
+    , body =
+        [ div []
+            [ div [ class "date" ] [ text (timestringToDate static.data.date) ]
+            , div [ class "poem" ] (markdownToPoemHtml static.data.body)
+            ]
+        ]
+    }
 
 
-markdownToHtml : String -> List (Html msg)
-markdownToHtml markdownString =
+type PoemNode
+    = Line String
+    | BlankLine
+    | Title String
+
+
+extraneousBlanksRegex : Regex
+extraneousBlanksRegex =
+    Maybe.withDefault Regex.never <|
+        Regex.fromString <|
+            foldl (++)
+                ""
+                [ "^\n+" -- beginning newlines
+                , "|"
+                , "\n+$" -- ending newlines
+                , "|"
+                , "(?<=#.+\n)\n" -- newlines after titles
+                ]
+
+
+markdownToPoemNodes : String -> List PoemNode
+markdownToPoemNodes markdownString =
     markdownString
+        |> Regex.replace extraneousBlanksRegex (\_ -> "")
         |> String.split "\n"
-        |> List.map poemNode
+        |> map
+            (\text ->
+                if String.isEmpty text then
+                    BlankLine
+
+                else if String.startsWith "#" text then
+                    Title <| String.replace "# " "" text
+
+                else
+                    Line text
+            )
+
+
+poemNodeToHtml : PoemNode -> Html msg
+poemNodeToHtml node =
+    case node of
+        BlankLine ->
+            div [ class "blank-line" ] []
+
+        Line t ->
+            div [ class "line" ] [ text t ]
+
+        Title t ->
+            h2 [ class "title" ] [ text t ]
+
+
+markdownToPoemHtml : String -> List (Html msg)
+markdownToPoemHtml markdown =
+    markdown
+        |> markdownToPoemNodes
+        |> map poemNodeToHtml
 
 
 timestringRegex : Regex
@@ -157,19 +193,3 @@ timestringToDate timestring =
         |> map .match
         |> List.head
         |> Maybe.withDefault "undated"
-
-
-view :
-    Maybe PageUrl
-    -> Shared.Model
-    -> StaticPayload Data RouteParams
-    -> View Msg
-view maybeUrl sharedModel static =
-    { title = "test"
-    , body =
-        [ div []
-            [ div [ class "date" ] [ text (timestringToDate static.data.date) ]
-            , div [ class "poem" ] (markdownToHtml static.data.body)
-            ]
-        ]
-    }

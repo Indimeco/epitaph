@@ -1,6 +1,5 @@
 # v1
 SECTION Dev
-TODO clean up blank line spacing
 TODO next and back buttons for poems
 TODO add long poem and test
 
@@ -17,3 +16,4 @@ TODO cicd
 TODO notes to site build pipeline
 TODO swap date/title
 TODO video/moving background for home/index https://www.subruria.com/
+
