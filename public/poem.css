@@ -1,9 +1,8 @@
 .poem__body {
-    --font-size-body: 24px;
     line-height: 1;
     white-space: break-spaces;
     font-size: var(--font-size-body);
-    margin-top: 40px;
+    margin-top: 32px;
 }
 
 .poem__body__line {
@@ -11,7 +10,7 @@
 }
 
 .poem__body__title {
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     font-weight: bold;
     color: var(--color-dark-sienna)
 }

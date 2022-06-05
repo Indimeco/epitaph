@@ -1,5 +1,6 @@
 @import "reset.css";
 @import "poem.css";
+@import "poems.css";
 
 * {
     box-sizing: border-box;
@@ -8,34 +9,49 @@
 :root {
     --color-bg: #ffffff;
     --color-fg: #222222;
-    --color-fg-lighter: #646165;
+    --color-fg-lighter: #BFBFBF;
     --color-page: #fffbf4;
-    --color-dark-sienna: #38040E;
-    --color-olive: #596F43;
-    --color-olive-lighter: #688E26;
+    /* --color-dark-sienna: #38040E; */
+    --color-dark-sienna: #990A29;
+    --color-olive: #82846D;
+    --color-olive-lighter: #BEBFB0;
+    --font-size-body: 24px;
 }
 
 html {
     font-family: 'Courier New', Courier, monospace;
+    font-size: var(--font-size-body);
     color: var(--color-fg);
 }
 
 html,
 body,
-#background {
-    height: 100%;
-    width: 100%;
-}
+#background {}
 
 #background {
     display: flex;
-    align-items: center;
     justify-content: center;
     background-color: var(--color-page);
+    min-height: 100vh;
 }
 
 #book {
     width: 980px;
-    height: 700px;
-    padding: 56px;
+    padding: 64px;
+    margin-top: 64px;
+}
+
+/* Replace user agent visited style */
+a:visited {
+    color: inherit;
+}
+
+#book a {
+    color: var(--color-olive);
+    transition: 0.3s ease-out color;
+    font-weight: bold;
+}
+
+#book a:hover {
+    color: var(--color-olive-lighter);
 }

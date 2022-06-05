@@ -1,0 +1,13 @@
+.poems {
+    font-size: 24px;
+}
+
+.poems__heading {
+    margin-bottom: 40px;
+    color: var(--color-fg-lighter)
+}
+
+.poems__link {
+    display: block;
+    margin-bottom: 16px;
+}

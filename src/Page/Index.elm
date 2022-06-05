@@ -1,13 +1,18 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
 import DataSource exposing (DataSource)
+import DataSource.File
+import DataSource.Glob as Glob
 import Head
 import Head.Seo as Seo
-import Html exposing (div, text)
+import Html exposing (Html, a, b, div, h1, section, text)
+import Html.Attributes exposing (class, href)
+import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, PageWithState, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Shared
+import Util.Poem exposing (PoemNode(..), markdownToPoemNodes, poemDateMetadataKey, poemPath, timestringToDate)
 import View exposing (View)
 
 
@@ -23,6 +28,16 @@ type alias RouteParams =
     {}
 
 
+type alias PoemPreview =
+    { body : List PoemNode
+    , date : String
+    }
+
+
+type alias Data =
+    List PoemPreview
+
+
 page : Page RouteParams Data
 page =
     Page.single
@@ -32,9 +47,26 @@ page =
         |> Page.buildNoState { view = view }
 
 
+
+-- this decoder stuff is really a mess, should be refactored
+
+
+poemDecoder : String -> Decoder PoemPreview
+poemDecoder body =
+    OptimizedDecoder.map (PoemPreview <| markdownToPoemNodes body)
+        (OptimizedDecoder.field poemDateMetadataKey (OptimizedDecoder.map timestringToDate OptimizedDecoder.string))
+
+
 data : DataSource Data
 data =
-    DataSource.succeed ()
+    Glob.succeed identity
+        |> Glob.captureFilePath
+        |> Glob.match (Glob.literal poemPath)
+        |> Glob.match Glob.wildcard
+        |> Glob.match (Glob.literal ".md")
+        |> Glob.toDataSource
+        |> DataSource.map (List.map (DataSource.File.bodyWithFrontmatter poemDecoder))
+        |> DataSource.resolve
 
 
 head :
@@ -57,10 +89,6 @@ head static =
         |> Seo.website
 
 
-type alias Data =
-    ()
-
-
 view :
     Maybe PageUrl
     -> Shared.Model
@@ -69,5 +97,16 @@ view :
 view maybeUrl sharedModel static =
     { title = "test"
     , body =
-        [ div [] [ text "Index" ] ]
+        [ h1 [ class "poems__heading" ]
+            [ text "Poems" ]
+        , section
+            [ class "poems" ]
+          <|
+            List.map poemPreviewHtml static.data
+        ]
     }
+
+
+poemPreviewHtml : PoemPreview -> Html msg
+poemPreviewHtml prev =
+    a [ class "poems__link", href ("/poem/" ++ prev.date) ] [ text prev.date ]
