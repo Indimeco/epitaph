@@ -1,4 +1,4 @@
-module Page.Poem.Poem_ exposing (Data, Model, Msg, PoemNode(..), markdownToPoemNodes, page, timestringToDate)
+module Page.Poem.Poem_ exposing (Data, Model, Msg, page)
 
 import DataSource exposing (DataSource)
 import DataSource.File
@@ -7,13 +7,13 @@ import Head
 import Head.Seo as Seo
 import Html exposing (Html, div, h2, text)
 import Html.Attributes exposing (class)
-import List exposing (foldl, map)
+import List exposing (map)
 import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
-import Regex exposing (Regex)
 import Shared
+import Util.Poem exposing (..)
 import View exposing (View)
 
 
@@ -28,11 +28,6 @@ type alias Msg =
 type alias RouteParams =
     { poem : String
     }
-
-
-poemPath : String
-poemPath =
-    "content/poems/"
 
 
 page : Page RouteParams Data
@@ -84,7 +79,7 @@ type alias Data =
 poemDecoder : String -> Decoder Data
 poemDecoder body =
     OptimizedDecoder.map (Data body)
-        (OptimizedDecoder.field "created" OptimizedDecoder.string)
+        (OptimizedDecoder.field poemDateMetadataKey OptimizedDecoder.string)
 
 
 head :
@@ -123,42 +118,11 @@ view maybeUrl sharedModel static =
     }
 
 
-type PoemNode
-    = Line String
-    | BlankLine
-    | Title String
-
-
-extraneousBlanksRegex : Regex
-extraneousBlanksRegex =
-    Maybe.withDefault Regex.never <|
-        Regex.fromString <|
-            foldl (++)
-                ""
-                [ "^\n+" -- beginning newlines
-                , "|"
-                , "\n+$" -- ending newlines
-                , "|"
-                , "(?<=#.+\n)\n" -- newlines after titles
-                ]
-
-
-markdownToPoemNodes : String -> List PoemNode
-markdownToPoemNodes markdownString =
-    markdownString
-        |> Regex.replace extraneousBlanksRegex (\_ -> "")
-        |> String.split "\n"
-        |> map
-            (\text ->
-                if String.isEmpty text then
-                    BlankLine
-
-                else if String.startsWith "#" text then
-                    Title <| String.replace "# " "" text
-
-                else
-                    Line text
-            )
+markdownToPoemHtml : String -> List (Html msg)
+markdownToPoemHtml markdown =
+    markdown
+        |> markdownToPoemNodes
+        |> map poemNodeToHtml
 
 
 poemNodeToHtml : PoemNode -> Html msg
@@ -172,24 +136,3 @@ poemNodeToHtml node =
 
         Title t ->
             h2 [ class "title" ] [ text t ]
-
-
-markdownToPoemHtml : String -> List (Html msg)
-markdownToPoemHtml markdown =
-    markdown
-        |> markdownToPoemNodes
-        |> map poemNodeToHtml
-
-
-timestringRegex : Regex
-timestringRegex =
-    Maybe.withDefault Regex.never <| Regex.fromString "^\\d\\d\\d\\d\\-\\d\\d\\-\\d\\d"
-
-
-timestringToDate : String -> String
-timestringToDate timestring =
-    timestring
-        |> Regex.find timestringRegex
-        |> map .match
-        |> List.head
-        |> Maybe.withDefault "undated"

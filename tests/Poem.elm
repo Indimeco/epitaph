@@ -1,8 +1,8 @@
 module Poem exposing (..)
 
 import Expect
-import Page.Poem.Poem_ exposing (..)
 import Test exposing (..)
+import Util.Poem exposing (..)
 
 
 suite : Test
