@@ -7,7 +7,7 @@ import Util.Poem exposing (..)
 
 suite : Test
 suite =
-    describe "The poem page"
+    describe "Poem utilities"
         [ describe "timestampToDate"
             -- Nest as many descriptions as you like.
             [ test "returns a date from a date" <|

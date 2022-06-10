@@ -1,12 +1,13 @@
-module Page.Poem.Poem_ exposing (Data, Model, Msg, page)
+module Page.Poem.Poem_ exposing (Data, Model, Msg, nextEl, page, prevEl)
 
+import Array exposing (Array)
 import DataSource exposing (DataSource)
 import DataSource.File
 import DataSource.Glob as Glob
 import Head
 import Head.Seo as Seo
-import Html exposing (Html, div, h2, text)
-import Html.Attributes exposing (class)
+import Html exposing (Html, a, div, h2, section, text)
+import Html.Attributes exposing (class, href)
 import List exposing (map)
 import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, StaticPayload)
@@ -27,6 +28,8 @@ type alias Msg =
 
 type alias RouteParams =
     { poem : String
+    , nextPoem : Maybe String
+    , prevPoem : Maybe String
     }
 
 
@@ -42,14 +45,33 @@ page =
             }
 
 
+nextEl : Int -> Array a -> Maybe a
+nextEl currentIndex arr =
+    Array.get (currentIndex + 1) arr
+
+
+prevEl : Int -> Array a -> Maybe a
+prevEl currentIndex arr =
+    Array.get (currentIndex - 1) arr
+
+
 pages : DataSource (List RouteParams)
 pages =
     poems
         |> DataSource.map
-            (List.map
-                (\p ->
-                    { poem = p }
-                )
+            (\d ->
+                Array.fromList d
+                    |> (\a ->
+                            Array.indexedMap
+                                (\index p ->
+                                    { poem = p
+                                    , prevPoem = prevEl index a
+                                    , nextPoem = nextEl index a
+                                    }
+                                )
+                                a
+                                |> Array.toList
+                       )
             )
 
 
@@ -111,11 +133,22 @@ view maybeUrl sharedModel static =
     { title = "test"
     , body =
         [ div []
-            [ div [ class "poem__date" ] [ text (timestringToDate static.data.date) ]
-            , div [ class "poem__body" ] (markdownToPoemHtml static.data.body)
+            [ div [ class "poem__prevnext" ] [ prevNextLink "prev" static.routeParams.prevPoem ]
+            , div [ class "poem__date" ] [ text (timestringToDate static.data.date) ]
+            , section [ class "poem__body" ] (markdownToPoemHtml static.data.body)
             ]
         ]
     }
+
+
+prevNextLink : String -> Maybe String -> Html msg
+prevNextLink txt link =
+    case link of
+        Nothing ->
+            a [ class "poem__prevnext__link--disabled" ] [ text txt ]
+
+        Just x ->
+            a [ class "poem__prevnext__link", href x ] [ text txt ]
 
 
 markdownToPoemHtml : String -> List (Html msg)
