@@ -1,9 +1,10 @@
 # v1
 SECTION Dev
+TODO collections which detail poem order
 TODO next and back buttons for poems
 TODO poem not found page
 TODO poem title as page title
-TODO add preview of poems on index page
+TODO add preview of poems on collection page
 
 
 SECTION Design

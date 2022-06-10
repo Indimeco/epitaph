@@ -28,8 +28,6 @@ type alias Msg =
 
 type alias RouteParams =
     { poem : String
-    , nextPoem : Maybe String
-    , prevPoem : Maybe String
     }
 
 
@@ -59,20 +57,31 @@ pages : DataSource (List RouteParams)
 pages =
     poems
         |> DataSource.map
-            (\d ->
-                Array.fromList d
-                    |> (\a ->
-                            Array.indexedMap
-                                (\index p ->
-                                    { poem = p
-                                    , prevPoem = prevEl index a
-                                    , nextPoem = nextEl index a
-                                    }
-                                )
-                                a
-                                |> Array.toList
-                       )
+            (List.map
+                (\p ->
+                    { poem = p }
+                )
             )
+
+
+
+-- pages =
+--     poems
+--         |> DataSource.map
+--             (\d ->
+--                 Array.fromList d
+--                     |> (\a ->
+--                             Array.indexedMap
+--                                 (\index p ->
+--                                     { poem = p
+--                                     , prevPoem = prevEl index a
+--                                     , nextPoem = nextEl index a
+--                                     }
+--                                 )
+--                                 a
+--                                 |> Array.toList
+--                        )
+--             )
 
 
 poems : DataSource (List String)
@@ -90,17 +99,28 @@ data params =
         |> (++) poemPath
         |> (\s -> s ++ ".md")
         |> DataSource.File.bodyWithFrontmatter poemDecoder
+        -- TODO this is a rough proof of concept that we can use another datasource to source order of poems
+        -- need to create the collection structure and redo this
+        |> (\x -> DataSource.map2 (\p ps -> { body = p.body, date = p.date, nextPoem = Array.get 1 (Array.fromList ps), prevPoem = Nothing }) x poems)
 
 
 type alias Data =
     { body : String
     , date : String
+    , nextPoem : Maybe String
+    , prevPoem : Maybe String
     }
 
 
-poemDecoder : String -> Decoder Data
+type alias DecodedPoem =
+    { body : String
+    , date : String
+    }
+
+
+poemDecoder : String -> Decoder DecodedPoem
 poemDecoder body =
-    OptimizedDecoder.map (Data body)
+    OptimizedDecoder.map (DecodedPoem body)
         (OptimizedDecoder.field poemDateMetadataKey OptimizedDecoder.string)
 
 
@@ -133,7 +153,7 @@ view maybeUrl sharedModel static =
     { title = "test"
     , body =
         [ div []
-            [ div [ class "poem__prevnext" ] [ prevNextLink "prev" static.routeParams.prevPoem ]
+            [ div [ class "poem__prevnext" ] [ prevNextLink "prev" static.data.prevPoem, prevNextLink "next" static.data.nextPoem ]
             , div [ class "poem__date" ] [ text (timestringToDate static.data.date) ]
             , section [ class "poem__body" ] (markdownToPoemHtml static.data.body)
             ]

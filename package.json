@@ -1,5 +1,5 @@
 {
-  "name": "elm-pages-app",
+  "name": "epitaph",
   "scripts": {
     "postinstall": "elm-tooling install",
     "start": "elm-pages dev",
