@@ -32,6 +32,7 @@ type alias RouteParams =
 
 type alias CollectionData =
     { body : String
+    , title : String
     , poems : List String
     , date : String
     }
@@ -64,7 +65,8 @@ data =
 
 collectionDecoder : String -> Decoder CollectionData
 collectionDecoder body =
-    OptimizedDecoder.map2 (CollectionData <| body)
+    OptimizedDecoder.map3 (CollectionData <| body)
+        (OptimizedDecoder.field "title" OptimizedDecoder.string)
         (OptimizedDecoder.field "poems" (OptimizedDecoder.map (String.split " ") OptimizedDecoder.string))
         (OptimizedDecoder.field "created" (OptimizedDecoder.map timestringToDate OptimizedDecoder.string))
 
@@ -111,13 +113,24 @@ deadEndsToString deadEnds =
 
 
 collectionTile : CollectionData -> Html msg
-collectionTile { body, date, poems } =
+collectionTile { body, date, poems, title } =
     Html.button [ Html.Attributes.class "collections__tile" ]
-        (body
-            |> Markdown.Parser.parse
-            |> Result.mapError deadEndsToString
-            |> Result.andThen (\ast -> Markdown.Renderer.render Markdown.Renderer.defaultHtmlRenderer ast)
-            |> Result.withDefault
-                [-- TODO error message
-                ]
-        )
+        [ Html.div [ Html.Attributes.class "collections__tile__header" ]
+            [ Html.h2 [ Html.Attributes.class "collections__tile__header__title" ] [ Html.text title ]
+            , Html.span [ Html.Attributes.class "collections__tile__header__date" ] [ Html.text date ]
+            ]
+        , Html.div [ Html.Attributes.class "collections__tile__content" ]
+            (body
+                |> Markdown.Parser.parse
+                |> Result.mapError deadEndsToString
+                |> Result.andThen (\ast -> Markdown.Renderer.render Markdown.Renderer.defaultHtmlRenderer ast)
+                |> Result.withDefault [ errorMessage ]
+            )
+        , Html.ol [ Html.Attributes.class "collections__tile__poems" ] <|
+            List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href p ] [ Html.text p ] ]) poems
+        ]
+
+
+errorMessage : Html msg
+errorMessage =
+    Html.div [ Html.Attributes.class "error" ] [ Html.text "An error occurred / cosmic rays from newborn stars / or human folly" ]

@@ -1,7 +1,7 @@
 @import "reset.css";
 @import "poem.css";
 @import "poems.css";
-@import "collection.css";
+@import "collections.css";
 
 * {
     box-sizing: border-box;
@@ -39,4 +39,24 @@ html {
     padding: 64px;
     margin-top: 64px;
     margin-bottom: 64px;
+}
+
+a {
+    font-size: var(--font-size-small);
+    color: var(--color-olive);
+
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 4px 4px 8px var(--color-page-shadow),
+        -7px -7px 8px var(--color-page-highlight);
+}
+
+a:hover {
+    color: var(--color-olive-lighter);
+}
+
+a:active {
+    box-shadow: 4px 4px 8px var(--color-page-shadow) inset,
+        -7px -7px 8px var(--color-page-highlight) inset;
+
 }

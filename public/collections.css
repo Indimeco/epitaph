@@ -3,6 +3,8 @@
     color: var(--color-fg-lighter);
 }
 
+/* TILE */
+
 .collections__tile {
     padding: 24px;
     border-radius: 16px;
@@ -18,10 +20,27 @@
         -16px -16px 24px var(--color-page-highlight) inset;
 }
 
-.collections__tile h1 {
-    font-weight: bold;
+
+/* TILE HEADER */
+.collections__tile__header {
+    display: flex;
+    justify-content: space-between;
 }
 
-.collections__tile p {
+.collections__tile__header__date {
     font-size: var(--font-size-small);
+}
+
+/* TILE MARKDOWN */
+.collections__tile__content p {
+    font-size: var(--font-size-small);
+}
+
+/* TILE POEMS */
+.collections__tile__poems {
+    margin-top: 24px;
+}
+
+.collections__tile__poems li {
+    margin-top: 24px;
 }
