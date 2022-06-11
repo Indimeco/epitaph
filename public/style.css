@@ -7,15 +7,17 @@
 }
 
 :root {
-    --color-bg: #ffffff;
     --color-fg: #222222;
     --color-fg-lighter: #BFBFBF;
-    --color-page: #fffbf4;
+    --color-page: #fef7e5;
+    --color-page-shadow: #eee5d3;
+    --color-page-highlight: #FFFBF2;
     /* --color-dark-sienna: #38040E; */
     --color-dark-sienna: #990A29;
-    --color-olive: #82846D;
+    --color-olive: #9b9f84;
     --color-olive-lighter: #BEBFB0;
     --font-size-body: 24px;
+    --font-size-small: 16px;
 }
 
 html {
@@ -23,10 +25,6 @@ html {
     font-size: var(--font-size-body);
     color: var(--color-fg);
 }
-
-html,
-body,
-#background {}
 
 #background {
     display: flex;
@@ -39,19 +37,9 @@ body,
     width: 980px;
     padding: 64px;
     margin-top: 64px;
-}
+    margin-bottom: 64px;
 
-/* Replace user agent visited style */
-a:visited {
-    color: inherit;
-}
-
-#book a {
-    color: var(--color-olive);
-    transition: 0.3s ease-out color;
-    font-weight: bold;
-}
-
-#book a:hover {
-    color: var(--color-olive-lighter);
+    border-radius: 48px;
+    box-shadow: 24px 24px 32px var(--color-page-shadow),
+        -24px -24px 32px var(--color-page-highlight);
 }

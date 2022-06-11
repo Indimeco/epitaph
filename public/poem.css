@@ -20,7 +20,42 @@
 }
 
 .poem__date {
-    font-size: 16px;
+    font-size: var(--font-size-small);
     color: var(--color-olive-lighter);
     margin-bottom: 16px;
+}
+
+.poem__prevnext {
+    display: flex;
+    text-decoration: none;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+
+.poem__prevnext>.poem__prevnext__link--disabled {
+    cursor: not-allowed;
+    color: var(--color-fg-lighter);
+}
+
+.poem__prevnext__link {
+    font-size: 14px;
+    color: var(--color-olive);
+    font-weight: normal;
+
+    margin-right: 16px;
+    text-decoration: none;
+
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: 4px 4px 8px var(--color-page-shadow),
+        -7px -7px 8px var(--color-page-highlight);
+}
+
+.poem__prevnext__link:hover {
+    color: var(--color-olive-lighter);
+}
+
+.poem__prevnext__link:focus {
+    box-shadow: 4px 4px 8px var(--color-page-shadow) inset,
+        -7px -7px 8px var(--color-page-highlight) inset;
 }

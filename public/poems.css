@@ -11,3 +11,13 @@
     display: block;
     margin-bottom: 16px;
 }
+
+.poems__link {
+    color: var(--color-olive);
+    transition: 0.3s ease-out color;
+    font-weight: bold;
+}
+
+.poems__link:hover {
+    color: var(--color-olive-lighter);
+}

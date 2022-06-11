@@ -165,7 +165,7 @@ prevNextLink : String -> Maybe String -> Html msg
 prevNextLink txt link =
     case link of
         Nothing ->
-            a [ class "poem__prevnext__link--disabled" ] [ text txt ]
+            a [ class "poem__prevnext__link poem__prevnext__link--disabled" ] [ text txt ]
 
         Just x ->
             a [ class "poem__prevnext__link", href x ] [ text txt ]
