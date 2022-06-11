@@ -1,4 +1,4 @@
-module Page.Collection exposing (..)
+module Page.Collections exposing (..)
 
 import DataSource exposing (DataSource)
 import DataSource.File
@@ -54,7 +54,7 @@ data : DataSource Data
 data =
     Glob.succeed identity
         |> Glob.captureFilePath
-        |> Glob.match (Glob.literal "content/collection/")
+        |> Glob.match (Glob.literal "content/collections/")
         |> Glob.match Glob.wildcard
         |> Glob.match (Glob.literal ".md")
         |> Glob.toDataSource
@@ -98,8 +98,8 @@ view maybeUrl sharedModel static =
     { title = "test"
     , body =
         [ Html.h1 [ Html.Attributes.class "collection__heading" ]
-            [ Html.text "Collection" ]
-        , Html.div [] (List.map collectionTile static.data)
+            [ Html.text "Collections" ]
+        , Html.div [ Html.Attributes.class "collections" ] (List.map collectionTile static.data)
         ]
     }
 
@@ -112,7 +112,7 @@ deadEndsToString deadEnds =
 
 collectionTile : CollectionData -> Html msg
 collectionTile { body, date, poems } =
-    Html.div []
+    Html.button [ Html.Attributes.class "collections__tile" ]
         (body
             |> Markdown.Parser.parse
             |> Result.mapError deadEndsToString

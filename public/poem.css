@@ -1,3 +1,9 @@
+#book>.poem {
+    border-radius: 48px;
+    box-shadow: 24px 24px 32px var(--color-page-shadow),
+        -24px -24px 32px var(--color-page-highlight);
+}
+
 .poem__body {
     line-height: 1;
     white-space: break-spaces;

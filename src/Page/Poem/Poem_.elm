@@ -152,7 +152,7 @@ view :
 view maybeUrl sharedModel static =
     { title = "test"
     , body =
-        [ div []
+        [ div [ class "poem" ]
             [ div [ class "poem__prevnext" ] [ prevNextLink "prev" static.data.prevPoem, prevNextLink "next" static.data.nextPoem ]
             , div [ class "poem__date" ] [ text (timestringToDate static.data.date) ]
             , section [ class "poem__body" ] (markdownToPoemHtml static.data.body)

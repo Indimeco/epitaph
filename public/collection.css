@@ -1,0 +1,27 @@
+.collection__heading {
+    margin-bottom: 40px;
+    color: var(--color-fg-lighter);
+}
+
+.collections__tile {
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 16px 16px 24px var(--color-page-shadow),
+        -16px -16px 24px var(--color-page-highlight);
+    cursor: pointer;
+    width: 100%;
+    margin-bottom: 32px;
+}
+
+.collections__tile:active {
+    box-shadow: 16px 16px 24px var(--color-page-shadow) inset,
+        -16px -16px 24px var(--color-page-highlight) inset;
+}
+
+.collections__tile h1 {
+    font-weight: bold;
+}
+
+.collections__tile p {
+    font-size: var(--font-size-small);
+}
