@@ -7,6 +7,7 @@
     "elm-version": "0.19.1",
     "dependencies": {
         "direct": {
+            "dillonkearns/elm-markdown": "7.0.0",
             "dillonkearns/elm-pages": "9.0.0",
             "elm/browser": "1.0.2",
             "elm/core": "1.0.5",
@@ -32,6 +33,7 @@
             "elm/virtual-dom": "1.0.2",
             "elm-community/dict-extra": "2.4.0",
             "elm-community/list-extra": "8.5.1",
+            "elm-explorations/test": "1.2.2",
             "fredcy/elm-parseint": "2.0.1",
             "jfmengels/elm-review": "2.6.1",
             "mgold/elm-nonempty-list": "4.2.0",
