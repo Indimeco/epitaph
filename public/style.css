@@ -35,10 +35,11 @@ html {
 }
 
 #book {
-    width: 980px;
+    width: 1024px;
     padding: 64px;
     margin-top: 64px;
     margin-bottom: 64px;
+
 }
 
 a {

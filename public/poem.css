@@ -44,24 +44,6 @@
 }
 
 .poem__prevnext__link {
-    font-size: var(--font-size-small);
-    color: var(--color-olive);
-    font-weight: normal;
-
     margin-right: 16px;
     text-decoration: none;
-
-    border-radius: 8px;
-    padding: 12px;
-    box-shadow: 4px 4px 8px var(--color-page-shadow),
-        -7px -7px 8px var(--color-page-highlight);
-}
-
-.poem__prevnext__link:hover {
-    color: var(--color-olive-lighter);
-}
-
-.poem__prevnext__link:active {
-    box-shadow: 4px 4px 8px var(--color-page-shadow) inset,
-        -7px -7px 8px var(--color-page-highlight) inset;
 }
