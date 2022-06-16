@@ -15,9 +15,14 @@
     margin-bottom: 32px;
 }
 
-.collections__tile:active {
+.collections__tile:active,
+.collections__tile--selected {
     box-shadow: 16px 16px 24px var(--color-page-shadow) inset,
         -16px -16px 24px var(--color-page-highlight) inset;
+}
+
+.collections__tile--selected .collections__tile__poems {
+    display: block;
 }
 
 
@@ -39,6 +44,7 @@
 /* TILE POEMS */
 .collections__tile__poems {
     margin-top: 24px;
+    display: none;
 }
 
 .collections__tile__poems li {
