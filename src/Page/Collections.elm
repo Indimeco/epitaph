@@ -44,7 +44,11 @@ update : PageUrl -> Maybe Browser.Navigation.Key -> Shared.Model -> StaticPayloa
 update pageUrl key sharedModel static msg model =
     case msg of
         Select s ->
-            ( s, Cmd.none )
+            if s == model then
+                ( "", Cmd.none )
+
+            else
+                ( s, Cmd.none )
 
 
 type alias RouteParams =
