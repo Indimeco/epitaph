@@ -19,6 +19,27 @@
     --color-olive-lighter: #BEBFB0;
     --font-size-body: 24px;
     --font-size-small: 16px;
+
+    /* You can't defer CSS calc in vars, so we have subvars for neomorph sizes instead */
+    --neomorph-large-multiplier: 8;
+    --neomorph-tall-large: calc(var(--neomorph-large-multiplier) * 2px) calc(var(--neomorph-large-multiplier) * 2px) calc(var(--neomorph-large-multiplier) * 3px) var(--color-page-shadow),
+        calc(var(--neomorph-large-multiplier) * -2px) calc(var(--neomorph-large-multiplier) * -2px) calc(var(--neomorph-large-multiplier) * 2px) var(--color-page-highlight),
+        0 0 0 var(--color-page-shadow) inset,
+        0 0 0 var(--color-page-highlight) inset;
+    --neomorph-deep-large: 0 0 0 var(--color-page-shadow),
+        0 0 0 var(--color-page-highlight),
+        calc(var(--neomorph-large-multiplier) * 2px) calc(var(--neomorph-large-multiplier) * 2px) calc(var(--neomorph-large-multiplier) * 3px) var(--color-page-shadow) inset,
+        calc(var(--neomorph-large-multiplier) * -2px) calc(var(--neomorph-large-multiplier) * -2px) calc(var(--neomorph-large-multiplier) * 2px) var(--color-page-highlight) inset;
+
+    --neomorph-small-multiplier: 2;
+    --neomorph-tall-small: calc(var(--neomorph-small-multiplier) * 2px) calc(var(--neomorph-small-multiplier) * 2px) calc(var(--neomorph-small-multiplier) * 3px) var(--color-page-shadow),
+        calc(var(--neomorph-small-multiplier) * -2px) calc(var(--neomorph-small-multiplier) * -2px) calc(var(--neomorph-small-multiplier) * 2px) var(--color-page-highlight),
+        0 0 0 var(--color-page-shadow) inset,
+        0 0 0 var(--color-page-highlight) inset;
+    --neomorph-deep-small: 0 0 0 var(--color-page-shadow),
+        0 0 0 var(--color-page-highlight),
+        calc(var(--neomorph-small-multiplier) * 2px) calc(var(--neomorph-small-multiplier) * 2px) calc(var(--neomorph-small-multiplier) * 3px) var(--color-page-shadow) inset,
+        calc(var(--neomorph-small-multiplier) * -2px) calc(var(--neomorph-small-multiplier) * -2px) calc(var(--neomorph-small-multiplier) * 2px) var(--color-page-highlight) inset;
 }
 
 html {
@@ -49,8 +70,7 @@ a {
 
     border-radius: 8px;
     padding: 12px;
-    box-shadow: 4px 4px 8px var(--color-page-shadow),
-        -7px -7px 8px var(--color-page-highlight);
+    box-shadow: var(--neomorph-tall-small);
 }
 
 a:hover {
@@ -58,7 +78,6 @@ a:hover {
 }
 
 a:active {
-    box-shadow: 4px 4px 8px var(--color-page-shadow) inset,
-        -7px -7px 8px var(--color-page-highlight) inset;
+    box-shadow: var(--neomorph-deep-small);
 
 }
