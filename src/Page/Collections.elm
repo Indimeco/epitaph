@@ -18,7 +18,7 @@ import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path exposing (Path)
 import Shared
-import Util.Poem exposing (PoemNode(..), timestringToDate)
+import Util.Poem exposing (PoemNode(..), poemUrl, timestringToDate)
 import View exposing (View)
 
 
@@ -161,7 +161,7 @@ collectionTile { body, date, poems, title } selectedCollection =
                 |> Result.withDefault [ errorMessage ]
             )
         , Html.ol [ Html.Attributes.class "collections__tile__poems" ] <|
-            List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href p ] [ Html.text p ] ]) poems
+            List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href <| poemUrl p ] [ Html.text p ] ]) poems
         ]
 
 

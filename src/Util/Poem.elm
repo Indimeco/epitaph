@@ -9,6 +9,11 @@ poemPath =
     "content/poems/"
 
 
+poemUrl : String -> String
+poemUrl title =
+    "/poem/" ++ title
+
+
 poemDateMetadataKey : String
 poemDateMetadataKey =
     "created"
