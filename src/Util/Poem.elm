@@ -9,9 +9,9 @@ poemPath =
     "content/poems/"
 
 
-poemUrl : String -> String
-poemUrl title =
-    "/poem/" ++ title
+poemUrl : String -> String -> String
+poemUrl collection poem =
+    "/collection/" ++ collection ++ "/poem/" ++ poem
 
 
 poemDateMetadataKey : String

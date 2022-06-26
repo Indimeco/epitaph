@@ -3,7 +3,7 @@ module PoemPage exposing (..)
 import Array exposing (Array)
 import DataSource.Http exposing (Expect)
 import Expect
-import Page.Poem.Poem_ exposing (nextEl, prevEl)
+import Page.Collection.Collection_.Poem.Poem_ exposing (nextEl, prevEl)
 import Test exposing (..)
 
 

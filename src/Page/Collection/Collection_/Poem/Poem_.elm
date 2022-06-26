@@ -1,4 +1,4 @@
-module Page.Poem.Poem_ exposing (Data, Model, Msg, nextEl, page, prevEl)
+module Page.Collection.Collection_.Poem.Poem_ exposing (Data, Model, Msg, nextEl, page, prevEl)
 
 import Array exposing (Array)
 import DataSource exposing (DataSource)
@@ -27,7 +27,8 @@ type alias Msg =
 
 
 type alias RouteParams =
-    { poem : String
+    { collection : String
+    , poem : String
     }
 
 
@@ -35,7 +36,7 @@ page : Page RouteParams Data
 page =
     Page.prerender
         { head = head
-        , routes = pages
+        , routes = routes
         , data = data
         }
         |> Page.buildNoState
@@ -53,35 +54,16 @@ prevEl currentIndex arr =
     Array.get (currentIndex - 1) arr
 
 
-pages : DataSource (List RouteParams)
-pages =
+routes : DataSource (List RouteParams)
+routes =
     poems
         |> DataSource.map
             (List.map
                 (\p ->
-                    { poem = p }
+                    -- FIXME only epitaph collection is available here
+                    { collection = "epitaph", poem = p }
                 )
             )
-
-
-
--- pages =
---     poems
---         |> DataSource.map
---             (\d ->
---                 Array.fromList d
---                     |> (\a ->
---                             Array.indexedMap
---                                 (\index p ->
---                                     { poem = p
---                                     , prevPoem = prevEl index a
---                                     , nextPoem = nextEl index a
---                                     }
---                                 )
---                                 a
---                                 |> Array.toList
---                        )
---             )
 
 
 poems : DataSource (List String)
@@ -168,7 +150,8 @@ prevNextLink txt link =
             a [ class "poem__prevnext__link poem__prevnext__link--disabled" ] [ text txt ]
 
         Just x ->
-            a [ class "poem__prevnext__link", href x ] [ text txt ]
+            -- FIXME pass collection to poem url
+            a [ class "poem__prevnext__link", href <| poemUrl "" x ] [ text txt ]
 
 
 markdownToPoemHtml : String -> List (Html msg)

@@ -12,7 +12,7 @@ import Html.Events
 import Markdown.Parser
 import Markdown.Renderer
 import OptimizedDecoder exposing (Decoder)
-import Page exposing (Page, PageWithState, StaticPayload)
+import Page exposing (PageWithState, StaticPayload)
 import Pages.Manifest exposing (DisplayMode(..))
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
@@ -57,6 +57,7 @@ type alias RouteParams =
 
 type alias CollectionData =
     { body : String
+    , id : String
     , title : String
     , poems : List String
     , date : String
@@ -76,21 +77,26 @@ page =
         |> Page.buildWithLocalState { view = view, init = init, subscriptions = subscriptions, update = update }
 
 
-data : DataSource Data
-data =
-    Glob.succeed identity
+collectionPaths : DataSource (List { filePath : String, id : String })
+collectionPaths =
+    Glob.succeed (\filePath id -> { filePath = filePath, id = id })
         |> Glob.captureFilePath
         |> Glob.match (Glob.literal "content/collections/")
-        |> Glob.match Glob.wildcard
+        |> Glob.capture Glob.wildcard
         |> Glob.match (Glob.literal ".md")
         |> Glob.toDataSource
-        |> DataSource.map (List.map (DataSource.File.bodyWithFrontmatter collectionDecoder))
+
+
+data : DataSource Data
+data =
+    collectionPaths
+        |> DataSource.map (List.map (\{ filePath, id } -> DataSource.File.bodyWithFrontmatter (collectionDecoder id) filePath))
         |> DataSource.resolve
 
 
-collectionDecoder : String -> Decoder CollectionData
-collectionDecoder body =
-    OptimizedDecoder.map3 (CollectionData <| body)
+collectionDecoder : String -> String -> Decoder CollectionData
+collectionDecoder path body =
+    OptimizedDecoder.map3 (CollectionData body path)
         (OptimizedDecoder.field "title" OptimizedDecoder.string)
         (OptimizedDecoder.field "poems" (OptimizedDecoder.map (String.split " ") OptimizedDecoder.string))
         (OptimizedDecoder.field "created" (OptimizedDecoder.map timestringToDate OptimizedDecoder.string))
@@ -139,7 +145,7 @@ deadEndsToString deadEnds =
 
 
 collectionTile : CollectionData -> String -> Html Msg
-collectionTile { body, date, poems, title } selectedCollection =
+collectionTile { id, body, date, poems, title } selectedCollection =
     let
         selectedClass =
             if selectedCollection == title then
@@ -161,7 +167,7 @@ collectionTile { body, date, poems, title } selectedCollection =
                 |> Result.withDefault [ errorMessage ]
             )
         , Html.ol [ Html.Attributes.class "collections__tile__poems" ] <|
-            List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href <| poemUrl p ] [ Html.text p ] ]) poems
+            List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href <| poemUrl id p ] [ Html.text p ] ]) poems
         ]
 
 
