@@ -77,13 +77,22 @@ poems =
 
 data : RouteParams -> DataSource Data
 data params =
-    params.poem
-        |> (++) poemPath
-        |> (\s -> s ++ ".md")
-        |> DataSource.File.bodyWithFrontmatter poemDecoder
-        -- TODO this is a rough proof of concept that we can use another datasource to source order of poems
-        -- need to create the collection structure and redo this
-        |> (\x -> DataSource.map2 (\p ps -> { body = p.body, date = p.date, nextPoem = Array.get 1 (Array.fromList ps), prevPoem = Nothing }) x poems)
+    let
+        poem =
+            params.poem
+                |> (++) poemPath
+                |> (\s -> s ++ ".md")
+                |> DataSource.File.bodyWithFrontmatter poemDecoder
+
+        collection =
+            params.collection
+                |> (++) collectionPath
+                |> (\s -> s ++ ".md")
+                |> DataSource.File.onlyFrontmatter collectionDecoder
+    in
+    -- TODO this is a rough proof of concept that we can use another datasource to source order of poems
+    -- need to create the collection structure and redo this
+    DataSource.map2 (\p c -> { body = p.body, date = p.date, nextPoem = Array.get 1 c.poems, prevPoem = Nothing }) poem collection
 
 
 type alias Data =
@@ -102,8 +111,21 @@ type alias DecodedPoem =
 
 poemDecoder : String -> Decoder DecodedPoem
 poemDecoder body =
-    OptimizedDecoder.map (DecodedPoem body)
-        (OptimizedDecoder.field poemDateMetadataKey OptimizedDecoder.string)
+    OptimizedDecoder.map (DecodedPoem body) <|
+        OptimizedDecoder.map timestringToDate (OptimizedDecoder.field poemDateMetadataKey OptimizedDecoder.string)
+
+
+type alias DecodedCollection =
+    { title : String
+    , poems : Array String
+    }
+
+
+collectionDecoder : Decoder DecodedCollection
+collectionDecoder =
+    OptimizedDecoder.map2 DecodedCollection
+        (OptimizedDecoder.field "title" OptimizedDecoder.string)
+        (OptimizedDecoder.field "poems" (OptimizedDecoder.array <| OptimizedDecoder.map timestringToDate <| OptimizedDecoder.string))
 
 
 head :
@@ -136,7 +158,7 @@ view maybeUrl sharedModel static =
     , body =
         [ div [ class "poem" ]
             [ div [ class "poem__prevnext" ] [ prevNextLink "prev" static.data.prevPoem, prevNextLink "next" static.data.nextPoem ]
-            , div [ class "poem__date" ] [ text (timestringToDate static.data.date) ]
+            , div [ class "poem__date" ] [ text static.data.date ]
             , section [ class "poem__body" ] (markdownToPoemHtml static.data.body)
             ]
         ]
@@ -151,7 +173,7 @@ prevNextLink txt link =
 
         Just x ->
             -- FIXME pass collection to poem url
-            a [ class "poem__prevnext__link", href <| poemUrl "" x ] [ text txt ]
+            a [ class "poem__prevnext__link", href <| poemUrl "epitaph" x ] [ text txt ]
 
 
 markdownToPoemHtml : String -> List (Html msg)

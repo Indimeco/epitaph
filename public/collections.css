@@ -25,6 +25,8 @@
 .collections__tile--selected .collections__tile__poems {
     max-height: 100vh;
     margin-top: 24px;
+    opacity: 1;
+    overflow: visible;
 }
 
 
@@ -47,9 +49,10 @@
 .collections__tile__poems {
     margin-top: 0;
     max-height: 0;
+    opacity: 0;
     overflow: hidden;
-    transition-property: max-height, margin-top;
-    transition-duration: 0.1s;
+    transition-property: max-height, opacity;
+    transition-duration: 0.3s;
     transition-timing-function: ease-in;
 }
 

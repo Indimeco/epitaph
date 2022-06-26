@@ -4,6 +4,11 @@ import List exposing (foldl, map)
 import Regex exposing (Regex)
 
 
+collectionPath : String
+collectionPath =
+    "content/collections/"
+
+
 poemPath : String
 poemPath =
     "content/poems/"
