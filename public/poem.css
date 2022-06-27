@@ -35,16 +35,15 @@
     display: flex;
     text-decoration: none;
     justify-content: flex-end;
-    cursor: pointer;
 }
 
-.poem__prevnext>.poem__prevnext__link--disabled {
+.poem__prevnext__link.poem__prevnext__link--disabled {
     cursor: not-allowed;
-    pointer-events: none;
     color: var(--color-fg-lighter);
 }
 
 .poem__prevnext__link {
+    cursor: pointer;
     margin-right: 16px;
     text-decoration: none;
 }
