@@ -1,5 +1,6 @@
 module Page.Collections exposing (..)
 
+import Array exposing (Array)
 import Browser.Navigation
 import DataSource exposing (DataSource)
 import DataSource.File
@@ -59,7 +60,7 @@ type alias CollectionData =
     { body : String
     , id : String
     , title : String
-    , poems : List String
+    , poems : Array String
     , date : String
     }
 
@@ -98,7 +99,7 @@ collectionDecoder : String -> String -> Decoder CollectionData
 collectionDecoder path body =
     OptimizedDecoder.map3 (CollectionData body path)
         (OptimizedDecoder.field "title" OptimizedDecoder.string)
-        (OptimizedDecoder.field "poems" (OptimizedDecoder.map (String.split " ") OptimizedDecoder.string))
+        (OptimizedDecoder.field "poems" (OptimizedDecoder.array <| OptimizedDecoder.map timestringToDate <| OptimizedDecoder.string))
         (OptimizedDecoder.field "created" (OptimizedDecoder.map timestringToDate OptimizedDecoder.string))
 
 
@@ -167,7 +168,7 @@ collectionTile { id, body, date, poems, title } selectedCollection =
                 |> Result.withDefault [ errorMessage ]
             )
         , Html.ol [ Html.Attributes.class "collections__tile__poems" ] <|
-            List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href <| poemUrl id p ] [ Html.text p ] ]) poems
+            List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href <| poemUrl id p ] [ Html.text p ] ]) (Array.toList poems)
         ]
 
 

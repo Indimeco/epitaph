@@ -90,9 +90,16 @@ data params =
                 |> (\s -> s ++ ".md")
                 |> DataSource.File.onlyFrontmatter collectionDecoder
     in
-    -- TODO this is a rough proof of concept that we can use another datasource to source order of poems
-    -- need to create the collection structure and redo this
-    DataSource.map2 (\p c -> { body = p.body, date = p.date, nextPoem = Array.get 1 c.poems, prevPoem = Nothing }) poem collection
+    DataSource.map2
+        (\p c ->
+            let
+                currentIndex =
+                    Array.toIndexedList c.poems |> List.filter (\( _, v ) -> v == params.poem) |> List.head |> Maybe.withDefault ( 1, "" ) |> Tuple.first
+            in
+            { body = p.body, date = p.date, nextPoem = nextEl currentIndex c.poems, prevPoem = prevEl currentIndex c.poems }
+        )
+        poem
+        collection
 
 
 type alias Data =
