@@ -11,7 +11,7 @@ import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Shared
-import Util.CollectionData exposing (getCollection)
+import Util.CollectionData exposing (collections, getCollection)
 import Util.Poem exposing (..)
 import Util.PoemData exposing (getPoem, poemUrl, poems)
 import View exposing (View)
@@ -55,12 +55,11 @@ prevEl currentIndex arr =
 
 routes : DataSource (List RouteParams)
 routes =
-    poems
+    collections
         |> DataSource.map
-            (List.map
-                (\p ->
-                    -- FIXME only epitaph collection is available here
-                    { collection = "epitaph", poem = p }
+            (List.concatMap
+                (\collection ->
+                    List.map (\p -> { collection = collection.id, poem = p }) (Array.toList collection.poems)
                 )
             )
 
@@ -80,16 +79,18 @@ data params =
         (\p c ->
             let
                 currentIndex =
+                    -- REVIEW extract and test
                     Array.toIndexedList c.poems |> List.filter (\( _, v ) -> v == params.poem) |> List.head |> Maybe.withDefault ( 1, "" ) |> Tuple.first
             in
-            { body = p.body, date = p.date, nextPoem = nextEl currentIndex c.poems, prevPoem = prevEl currentIndex c.poems }
+            { body = p.body, date = p.date, nextPoem = nextEl currentIndex c.poems, prevPoem = prevEl currentIndex c.poems, collectionId = params.collection }
         )
         poem
         collection
 
 
 type alias Data =
-    { body : String
+    { collectionId : String
+    , body : String
     , date : String
     , nextPoem : Maybe String
     , prevPoem : Maybe String
@@ -125,7 +126,10 @@ view maybeUrl sharedModel static =
     { title = "test"
     , body =
         [ div [ class "poem" ]
-            [ div [ class "poem__prevnext" ] [ prevNextLink "prev" static.data.prevPoem, prevNextLink "next" static.data.nextPoem ]
+            [ div [ class "poem__prevnext" ]
+                [ prevNextLink "prev" static.data.collectionId static.data.prevPoem
+                , prevNextLink "next" static.data.collectionId static.data.nextPoem
+                ]
             , div [ class "poem__date" ] [ text static.data.date ]
             , section [ class "poem__body" ] (markdownToPoemHtml static.data.body)
             ]
@@ -133,15 +137,14 @@ view maybeUrl sharedModel static =
     }
 
 
-prevNextLink : String -> Maybe String -> Html msg
-prevNextLink txt link =
+prevNextLink : String -> String -> Maybe String -> Html msg
+prevNextLink txt collectionId link =
     case link of
         Nothing ->
             a [ class "poem__prevnext__link poem__prevnext__link--disabled" ] [ text txt ]
 
         Just x ->
-            -- FIXME pass collection to poem url
-            a [ class "poem__prevnext__link", href <| poemUrl "epitaph" x ] [ text txt ]
+            a [ class "poem__prevnext__link", href <| poemUrl collectionId x ] [ text txt ]
 
 
 markdownToPoemHtml : String -> List (Html msg)
