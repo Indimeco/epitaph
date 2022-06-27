@@ -3,8 +3,6 @@ module Page.Collections exposing (..)
 import Array exposing (Array)
 import Browser.Navigation
 import DataSource exposing (DataSource)
-import DataSource.File
-import DataSource.Glob as Glob
 import Head
 import Head.Seo as Seo
 import Html exposing (Html)
@@ -12,14 +10,15 @@ import Html.Attributes
 import Html.Events
 import Markdown.Parser
 import Markdown.Renderer
-import OptimizedDecoder exposing (Decoder)
 import Page exposing (PageWithState, StaticPayload)
 import Pages.Manifest exposing (DisplayMode(..))
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path exposing (Path)
 import Shared
-import Util.Poem exposing (PoemNode(..), poemUrl, timestringToDate)
+import Util.CollectionData exposing (CollectionData, collections)
+import Util.Poem exposing (PoemNode(..))
+import Util.PoemData exposing (poemUrl)
 import View exposing (View)
 
 
@@ -56,15 +55,6 @@ type alias RouteParams =
     {}
 
 
-type alias CollectionData =
-    { body : String
-    , id : String
-    , title : String
-    , poems : Array String
-    , date : String
-    }
-
-
 type alias Data =
     List CollectionData
 
@@ -78,29 +68,9 @@ page =
         |> Page.buildWithLocalState { view = view, init = init, subscriptions = subscriptions, update = update }
 
 
-collectionPaths : DataSource (List { filePath : String, id : String })
-collectionPaths =
-    Glob.succeed (\filePath id -> { filePath = filePath, id = id })
-        |> Glob.captureFilePath
-        |> Glob.match (Glob.literal "content/collections/")
-        |> Glob.capture Glob.wildcard
-        |> Glob.match (Glob.literal ".md")
-        |> Glob.toDataSource
-
-
 data : DataSource Data
 data =
-    collectionPaths
-        |> DataSource.map (List.map (\{ filePath, id } -> DataSource.File.bodyWithFrontmatter (collectionDecoder id) filePath))
-        |> DataSource.resolve
-
-
-collectionDecoder : String -> String -> Decoder CollectionData
-collectionDecoder path body =
-    OptimizedDecoder.map3 (CollectionData body path)
-        (OptimizedDecoder.field "title" OptimizedDecoder.string)
-        (OptimizedDecoder.field "poems" (OptimizedDecoder.array <| OptimizedDecoder.map timestringToDate <| OptimizedDecoder.string))
-        (OptimizedDecoder.field "created" (OptimizedDecoder.map timestringToDate OptimizedDecoder.string))
+    collections
 
 
 head :

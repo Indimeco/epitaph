@@ -4,26 +4,6 @@ import List exposing (foldl, map)
 import Regex exposing (Regex)
 
 
-collectionPath : String
-collectionPath =
-    "content/collections/"
-
-
-poemPath : String
-poemPath =
-    "content/poems/"
-
-
-poemUrl : String -> String -> String
-poemUrl collection poem =
-    "/collection/" ++ collection ++ "/poem/" ++ poem
-
-
-poemDateMetadataKey : String
-poemDateMetadataKey =
-    "created"
-
-
 type PoemNode
     = Line String
     | BlankLine

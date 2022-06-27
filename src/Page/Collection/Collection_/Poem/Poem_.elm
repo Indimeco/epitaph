@@ -2,19 +2,18 @@ module Page.Collection.Collection_.Poem.Poem_ exposing (Data, Model, Msg, nextEl
 
 import Array exposing (Array)
 import DataSource exposing (DataSource)
-import DataSource.File
-import DataSource.Glob as Glob
 import Head
 import Head.Seo as Seo
 import Html exposing (Html, a, div, h2, section, text)
 import Html.Attributes exposing (class, href)
 import List exposing (map)
-import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Shared
+import Util.CollectionData exposing (getCollection)
 import Util.Poem exposing (..)
+import Util.PoemData exposing (getPoem, poemUrl, poems)
 import View exposing (View)
 
 
@@ -66,29 +65,16 @@ routes =
             )
 
 
-poems : DataSource (List String)
-poems =
-    Glob.succeed (\slug -> slug)
-        |> Glob.match (Glob.literal poemPath)
-        |> Glob.capture Glob.wildcard
-        |> Glob.match (Glob.literal ".md")
-        |> Glob.toDataSource
-
-
 data : RouteParams -> DataSource Data
 data params =
     let
         poem =
             params.poem
-                |> (++) poemPath
-                |> (\s -> s ++ ".md")
-                |> DataSource.File.bodyWithFrontmatter poemDecoder
+                |> getPoem
 
         collection =
             params.collection
-                |> (++) collectionPath
-                |> (\s -> s ++ ".md")
-                |> DataSource.File.onlyFrontmatter collectionDecoder
+                |> getCollection
     in
     DataSource.map2
         (\p c ->
@@ -108,31 +94,6 @@ type alias Data =
     , nextPoem : Maybe String
     , prevPoem : Maybe String
     }
-
-
-type alias DecodedPoem =
-    { body : String
-    , date : String
-    }
-
-
-poemDecoder : String -> Decoder DecodedPoem
-poemDecoder body =
-    OptimizedDecoder.map (DecodedPoem body) <|
-        OptimizedDecoder.map timestringToDate (OptimizedDecoder.field poemDateMetadataKey OptimizedDecoder.string)
-
-
-type alias DecodedCollection =
-    { title : String
-    , poems : Array String
-    }
-
-
-collectionDecoder : Decoder DecodedCollection
-collectionDecoder =
-    OptimizedDecoder.map2 DecodedCollection
-        (OptimizedDecoder.field "title" OptimizedDecoder.string)
-        (OptimizedDecoder.field "poems" (OptimizedDecoder.array <| OptimizedDecoder.map timestringToDate <| OptimizedDecoder.string))
 
 
 head :

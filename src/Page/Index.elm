@@ -1,8 +1,6 @@
 module Page.Index exposing (Data, Model, Msg, page)
 
 import DataSource exposing (DataSource)
-import DataSource.File
-import DataSource.Glob as Glob
 import Head
 import Head.Seo as Seo
 import Html exposing (Html, a, b, div, h1, section, text)
@@ -12,7 +10,7 @@ import Page exposing (Page, PageWithState, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Shared
-import Util.Poem exposing (PoemNode(..), markdownToPoemNodes, poemDateMetadataKey, poemPath, timestringToDate)
+import Util.Poem exposing (PoemNode(..), markdownToPoemNodes, timestringToDate)
 import View exposing (View)
 
 
@@ -35,7 +33,7 @@ type alias PoemPreview =
 
 
 type alias Data =
-    List PoemPreview
+    String
 
 
 page : Page RouteParams Data
@@ -47,26 +45,9 @@ page =
         |> Page.buildNoState { view = view }
 
 
-
--- this decoder stuff is really a mess, should be refactored
-
-
-poemDecoder : String -> Decoder PoemPreview
-poemDecoder body =
-    OptimizedDecoder.map (PoemPreview <| markdownToPoemNodes body)
-        (OptimizedDecoder.field poemDateMetadataKey (OptimizedDecoder.map timestringToDate OptimizedDecoder.string))
-
-
 data : DataSource Data
 data =
-    Glob.succeed identity
-        |> Glob.captureFilePath
-        |> Glob.match (Glob.literal poemPath)
-        |> Glob.match Glob.wildcard
-        |> Glob.match (Glob.literal ".md")
-        |> Glob.toDataSource
-        |> DataSource.map (List.map (DataSource.File.bodyWithFrontmatter poemDecoder))
-        |> DataSource.resolve
+    DataSource.succeed "No"
 
 
 head :
@@ -101,12 +82,6 @@ view maybeUrl sharedModel static =
             [ text "Poems" ]
         , section
             [ class "poems" ]
-          <|
-            List.map poemPreviewHtml static.data
+            []
         ]
     }
-
-
-poemPreviewHtml : PoemPreview -> Html msg
-poemPreviewHtml prev =
-    a [ class "poems__link", href ("/poem/" ++ prev.date) ] [ text prev.date ]
