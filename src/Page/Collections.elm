@@ -79,10 +79,10 @@ head :
 head static =
     Seo.summary
         { canonicalUrlOverride = Nothing
-        , siteName = "elm-pages"
+        , siteName = "epitaph"
         , image =
             { url = Pages.Url.external "TODO"
-            , alt = "elm-pages logo"
+            , alt = "epitaph logo"
             , dimensions = Nothing
             , mimeType = Nothing
             }

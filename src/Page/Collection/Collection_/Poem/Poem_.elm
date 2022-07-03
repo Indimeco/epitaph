@@ -106,7 +106,7 @@ head static =
         , siteName = "repertoire"
         , image =
             { url = Pages.Url.external "TODO"
-            , alt = "elm-pages logo"
+            , alt = "epitaph logo"
             , dimensions = Nothing
             , mimeType = Nothing
             }

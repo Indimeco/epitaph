@@ -16,7 +16,7 @@ config =
     { data = data
 
     -- FIXME elm pages metadata
-    , canonicalUrl = "https://elm-pages.com"
+    , canonicalUrl = "https://epitaph.com"
     , manifest = manifest
     , head = head
     }
