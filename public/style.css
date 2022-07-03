@@ -3,10 +3,6 @@
 @import "poems.css";
 @import "collections.css";
 
-* {
-    box-sizing: border-box;
-}
-
 :root {
     --color-fg: #222222;
     --color-fg-lighter: #BFBFBF;
@@ -42,6 +38,11 @@
         calc(var(--neomorph-small-multiplier) * -2px) calc(var(--neomorph-small-multiplier) * -2px) calc(var(--neomorph-small-multiplier) * 2px) var(--color-page-highlight) inset;
 }
 
+/* BODY */
+* {
+    box-sizing: border-box;
+}
+
 html {
     font-family: 'Courier New', Courier, monospace;
     font-size: var(--font-size-body);
@@ -53,6 +54,19 @@ html {
     justify-content: center;
     background-color: var(--color-page);
     min-height: 100vh;
+    transition: background-color 0.4s ease-in-out;
+}
+
+#book.nav--active::after {
+    content: "";
+    display: block;
+    position: fixed;
+    padding: 100px 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 #book {
@@ -63,7 +77,7 @@ html {
 
 }
 
-a {
+#book a {
     display: inline-block;
     font-size: var(--font-size-small);
     color: var(--color-olive);
@@ -73,11 +87,118 @@ a {
     box-shadow: var(--neomorph-tall-small);
 }
 
-a:hover {
+#book a:hover {
     color: var(--color-olive-lighter);
 }
 
-a:active {
+#book a:active {
     box-shadow: var(--neomorph-deep-small);
 
+}
+
+/* NAVIGATION */
+
+.nav {
+    position: fixed;
+    top: 0;
+    overflow: hidden;
+    transition: transform 0.4s ease;
+    width: 240px;
+    transform: translateX(0);
+    height: 100%;
+    background-color: var(--color-olive);
+    left: -240px;
+    z-index: 2;
+}
+
+.nav.nav--active {
+    transform: translateX(280px);
+    color: var(--color-page-highlight);
+}
+
+.nav__control {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    height: 100%;
+    cursor: pointer;
+    background-color: var(--color-olive-lighter);
+    color: var(--color-olive);
+    transition-property: color, background-color;
+    transition-duration: 400ms;
+    transition-timing-function: ease-in-out;
+}
+
+.nav__control:hover,
+.nav__control.nav--active {
+    background-color: var(--color-olive);
+    color: var(--color-fg);
+}
+
+.nav__control__icon svg {
+    width: 24px;
+    stroke: currentColor;
+}
+
+.nav__control__context {
+    width: 40px;
+    padding: 8px;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.nav__control__heading {
+    margin-top: 32px;
+    margin-bottom: auto;
+    letter-spacing: 16px;
+}
+
+.nav__body {
+    padding: 32px;
+    font-size: var(--font-size-small);
+}
+
+@property --offset {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0;
+}
+
+.nav__body a {
+    color: var(--color-page);
+    font-weight: bold;
+    margin-bottom: 16px;
+
+    text-underline-offset: var(--offset, 0.2em);
+    text-decoration: underline 0.15em;
+    --offset: 8px;
+    transition: --offset 400ms, text-decoration-color 400ms;
+    display: block;
+}
+
+.nav__body__heading {
+    margin-bottom: 24px;
+}
+
+.nav__body a:hover,
+.nav__body a:focus {
+    --offset: 4px;
+    text-decoration-color: var(--color-dark-sienna);
+    color: var(--color-dark-sienna);
+}
+
+@supports not (background: paint(something)) {
+    .nav__body a {
+        transition: text-underline-offset 400ms, text-decoration-color 400ms;
+    }
+
+    .nav__body a:hover,
+    .nav__body a:focus {
+        text-underline-offset: 4px;
+    }
 }

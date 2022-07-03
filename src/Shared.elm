@@ -1,9 +1,11 @@
 module Shared exposing (Data, Model, Msg(..), SharedMsg(..), template)
 
 import Browser.Navigation
+import Components.MenuSvg exposing (menuSvg)
 import DataSource
 import Html exposing (Html, div)
 import Html.Attributes
+import Html.Events
 import Pages.Flags
 import Pages.PageUrl exposing (PageUrl)
 import Path exposing (Path)
@@ -29,6 +31,7 @@ type Msg
         , query : Maybe String
         , fragment : Maybe String
         }
+    | ShowMenu Bool
     | SharedMsg SharedMsg
 
 
@@ -41,7 +44,7 @@ type SharedMsg
 
 
 type alias Model =
-    { showMobileMenu : Bool
+    { showMenu : Bool
     }
 
 
@@ -60,7 +63,7 @@ init :
             }
     -> ( Model, Cmd Msg )
 init navigationKey flags maybePagePath =
-    ( { showMobileMenu = False }
+    ( { showMenu = False }
     , Cmd.none
     )
 
@@ -69,10 +72,13 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         OnPageChange _ ->
-            ( { model | showMobileMenu = False }, Cmd.none )
+            ( { model | showMenu = False }, Cmd.none )
 
         SharedMsg globalMsg ->
             ( model, Cmd.none )
+
+        ShowMenu s ->
+            ( { model | showMenu = s }, Cmd.none )
 
 
 subscriptions : Path -> Model -> Sub Msg
@@ -96,6 +102,34 @@ view :
     -> View msg
     -> { body : Html msg, title : String }
 view sharedData page model toMsg pageView =
-    { body = div [ Html.Attributes.id "background" ] [ div [ Html.Attributes.id "book" ] [ div [] pageView.body ] ]
+    { body =
+        let
+            navActiveClass =
+                if model.showMenu == True then
+                    "nav--active"
+
+                else
+                    ""
+        in
+        div [ Html.Attributes.id "background" ]
+            [ Html.div [ Html.Attributes.class "nav__control", Html.Attributes.class navActiveClass, Html.Events.onClick (toMsg (ShowMenu <| not model.showMenu)) ]
+                [ Html.div
+                    [ Html.Attributes.class "nav__control__context", Html.Attributes.attribute "role" "button" ]
+                    [ Html.div
+                        [ Html.Attributes.class "nav__control__icon" ]
+                        [ menuSvg ]
+                    , Html.h1 [ Html.Attributes.class "nav__control__heading" ] [ Html.text "Epitaph" ]
+                    ]
+                ]
+            , Html.nav [ Html.Attributes.class "nav", Html.Attributes.class navActiveClass ]
+                [ Html.div [ Html.Attributes.class "nav__body" ]
+                    [ Html.a [ Html.Attributes.href "/" ]
+                        [ Html.h2 [ Html.Attributes.class "nav__body__heading" ] [ Html.text "Epitaph" ]
+                        ]
+                    , Html.ul [] [ Html.li [] [ Html.a [ Html.Attributes.href "/collections" ] [ Html.text "collections" ] ] ]
+                    ]
+                ]
+            , div [ Html.Attributes.id "book", Html.Events.onClick (toMsg (ShowMenu False)), Html.Attributes.class navActiveClass ] [ Html.section [] pageView.body ]
+            ]
     , title = pageView.title
     }

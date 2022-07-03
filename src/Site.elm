@@ -14,6 +14,8 @@ type alias Data =
 config : SiteConfig Data
 config =
     { data = data
+
+    -- FIXME elm pages metadata
     , canonicalUrl = "https://elm-pages.com"
     , manifest = manifest
     , head = head
