@@ -17,6 +17,7 @@ import Pages.Url
 import Path exposing (Path)
 import Shared
 import Util.CollectionData exposing (CollectionData, collections)
+import Util.Error exposing (errorMessage)
 import Util.Poem exposing (PoemNode(..))
 import Util.PoemData exposing (poemUrl)
 import View exposing (View)
@@ -140,8 +141,3 @@ collectionTile { id, body, date, poems, title } selectedCollection =
         , Html.ol [ Html.Attributes.class "collections__tile__poems" ] <|
             List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href <| poemUrl id p ] [ Html.text p ] ]) (Array.toList poems)
         ]
-
-
-errorMessage : Html msg
-errorMessage =
-    Html.div [ Html.Attributes.class "error" ] [ Html.text "An error occurred / cosmic rays from newborn stars / or human folly" ]
