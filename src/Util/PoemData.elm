@@ -5,7 +5,7 @@ import DataSource exposing (..)
 import DataSource.File
 import DataSource.Glob as Glob
 import OptimizedDecoder exposing (Decoder)
-import Util.Poem exposing (timestringToDate)
+import Util.Poem exposing (PoemNode, getTitle, markdownToPoemNodes, timestringToDate)
 
 
 poemPath : String
@@ -33,15 +33,21 @@ poems =
 
 
 type alias DecodedPoem =
-    { body : String
+    { body : List PoemNode
     , date : String
+    , title : Maybe String
     }
 
 
 poemDecoder : String -> Decoder DecodedPoem
 poemDecoder body =
-    OptimizedDecoder.map (DecodedPoem body) <|
-        OptimizedDecoder.map timestringToDate (OptimizedDecoder.field poemDateMetadataKey OptimizedDecoder.string)
+    let
+        poem =
+            markdownToPoemNodes body
+    in
+    OptimizedDecoder.map2 (DecodedPoem <| poem)
+        (OptimizedDecoder.field "created" (OptimizedDecoder.map timestringToDate OptimizedDecoder.string))
+        (OptimizedDecoder.succeed <| getTitle poem)
 
 
 getPoem : String -> DataSource DecodedPoem

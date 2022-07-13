@@ -54,3 +54,18 @@ timestringToDate timestring =
         |> map .match
         |> List.head
         |> Maybe.withDefault "undated"
+
+
+getTitle : List PoemNode -> Maybe String
+getTitle poem =
+    poem
+        |> List.head
+        |> Maybe.andThen
+            (\node ->
+                case node of
+                    Title t ->
+                        Just t
+
+                    _ ->
+                        Nothing
+            )

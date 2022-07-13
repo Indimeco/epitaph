@@ -137,4 +137,24 @@ suite =
                             , Line "A smile fell in the grass."
                             ]
             ]
+        , describe
+            "getTitle from poem"
+            [ test "gets title for a poem" <|
+                \_ ->
+                    [ Title "Child"
+                    , Line "Your clear eye is the one absolutely beautiful thing"
+                    , Line
+                        "I want to fill it with color and ducks"
+                    , Line "The zoo of the new"
+                    ]
+                        |> getTitle
+                        |> Expect.equal (Just "Child")
+            , test "does not get title for untitled poem" <|
+                \_ ->
+                    [ Line "a bee staggers out", Line "of the peony --", Line "enough" ]
+                        |> getTitle
+                        |> Expect.equal Nothing
+            , test "does not get title if it comes later in the poem" <|
+                \_ -> [ Line "a dedication", Title "Something", Line "Else" ] |> getTitle |> Expect.equal Nothing
+            ]
         ]

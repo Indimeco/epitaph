@@ -82,7 +82,7 @@ data params =
                     -- REVIEW extract and test
                     Array.toIndexedList c.poems |> List.filter (\( _, v ) -> v == params.poem) |> List.head |> Maybe.withDefault ( 1, "" ) |> Tuple.first
             in
-            { body = p.body, date = p.date, nextPoem = nextEl currentIndex c.poems, prevPoem = prevEl currentIndex c.poems, collectionId = params.collection }
+            { body = p.body, date = p.date, nextPoem = nextEl currentIndex c.poems, prevPoem = prevEl currentIndex c.poems, collectionId = params.collection, title = p.title }
         )
         poem
         collection
@@ -90,10 +90,11 @@ data params =
 
 type alias Data =
     { collectionId : String
-    , body : String
+    , body : List PoemNode
     , date : String
     , nextPoem : Maybe String
     , prevPoem : Maybe String
+    , title : Maybe String
     }
 
 
@@ -112,7 +113,9 @@ head static =
             }
         , description = "TODO"
         , locale = Nothing
-        , title = "TODO title" -- metadata.title -- TODO
+
+        -- REVIEW what's the best way to share titles
+        , title = "epitaph | " ++ Maybe.withDefault static.data.date static.data.title
         }
         |> Seo.website
 
@@ -123,7 +126,7 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel static =
-    { title = "test"
+    { title = "epitaph | " ++ Maybe.withDefault static.data.date static.data.title
     , body =
         [ div [ class "poem" ]
             [ div [ class "poem__prevnext" ]
@@ -131,7 +134,7 @@ view maybeUrl sharedModel static =
                 , prevNextLink "next" static.data.collectionId static.data.nextPoem
                 ]
             , div [ class "poem__date" ] [ text static.data.date ]
-            , section [ class "poem__body" ] (markdownToPoemHtml static.data.body)
+            , section [ class "poem__body" ] (List.map poemNodeToHtml <| static.data.body)
             ]
         ]
     }
@@ -145,13 +148,6 @@ prevNextLink txt collectionId link =
 
         Just x ->
             a [ class "poem__prevnext__link", href <| poemUrl collectionId x ] [ text txt ]
-
-
-markdownToPoemHtml : String -> List (Html msg)
-markdownToPoemHtml markdown =
-    markdown
-        |> markdownToPoemNodes
-        |> map poemNodeToHtml
 
 
 poemNodeToHtml : PoemNode -> Html msg
