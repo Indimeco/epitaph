@@ -2,6 +2,7 @@
 @import "poem.css";
 @import "poems.css";
 @import "collections.css";
+@import "prose.css";
 
 :root {
     --color-fg: #222222;

@@ -1,0 +1,8 @@
+.prose h1 {
+    font-weight: bold;
+    margin-bottom: 40px;
+}
+
+.prose p {
+    margin-bottom: 24px;
+}
