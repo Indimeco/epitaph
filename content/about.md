@@ -1,4 +1,4 @@
-# About this site
+# Why this site
 
 In 1821 in Rome, the poet John Keats lay in his deathbed. He asked his dear friend to inscribe this epitaph upon his tomb:
 
@@ -11,6 +11,12 @@ We often think of software and the internet as permanent, but they are ephemeral
 The internet is a garden; without gardeners it dissolves.
 
 Here is a pond for me, a patch of mud, a few water lilies. Here is a place where I write in the water.
+
+## About this site
+
+This site is handcrafted using the [Elm programming language](https://elm-lang.org/) and the [elm-pages](https://elm-pages.com/) static site generator.
+
+Content for this site is written in Markdown and processed in a build pipeline written in the Rust programming language.
 
 # About the author
 
