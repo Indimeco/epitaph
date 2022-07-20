@@ -3,14 +3,13 @@ module Page.Index exposing (Data, Model, Msg, page)
 import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo
-import Html exposing (Html, a, b, div, h1, section, text)
+import Html exposing (Html, p, a, b, div, h1, section, text)
 import Html.Attributes exposing (class, href)
 import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, PageWithState, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Shared
-import Util.Poem exposing (PoemNode(..), markdownToPoemNodes, timestringToDate)
 import View exposing (View)
 
 
@@ -24,12 +23,6 @@ type alias Msg =
 
 type alias RouteParams =
     {}
-
-
-type alias PoemPreview =
-    { body : List PoemNode
-    , date : String
-    }
 
 
 type alias Data =
@@ -76,12 +69,17 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel static =
-    { title = "test"
+    { title = "home"
     , body =
-        [ h1 [ class "poems__heading" ]
-            [ text "Poems" ]
-        , section
-            [ class "poems" ]
-            []
-        ]
+        [ section [ class "home"] [
+         h1 [ class "home__title" ]
+            [ text "Epitaph" ]
+        , p
+            [ class "home__subtitle" ]
+            [ text "Something" ]
+        , section [ class "home__showcase" ] [ 
+           a [ href "/collections" ] [ text "collections" ],
+           a [ href "/about" ] [ text "about" ]
+           ]
+        ]]
     }

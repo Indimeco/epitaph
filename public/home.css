@@ -1,0 +1,44 @@
+.home__title {
+	font-size: 64px;
+	color: var(--color-fg-lighter);
+	margin-bottom: 40px;
+}
+
+
+
+.home__subtitle {
+	font-size: var(--font-size-body);
+	color: var(--color-dark-sienna);
+	margin-bottom: 36px;
+}
+
+.home__showcase {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+}
+
+#book .home__showcase a {
+	width: 248px;
+	height: 248px;
+	margin-bottom: 40px;
+	box-shadow: var(--neomorph-tall-large);
+	font-size: var(--font-size-large);
+}
+
+#book .home__showcase a:hover {
+	box-shadow: var(--neomorph-deep-large);
+}
+
+@media screen and (min-width: 480px) {
+	.home__title {
+		font-size: 120px;
+	}
+	.home__showcase a {
+		margin-right: 40px;
+		flex-direction: row;
+		flex-wrap: wrap;
+		justify-content: flex-start;	
+	}
+}

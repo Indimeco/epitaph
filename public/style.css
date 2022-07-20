@@ -3,6 +3,7 @@
 @import "poems.css";
 @import "collections.css";
 @import "prose.css";
+@import "home.css";
 
 :root {
     --color-fg: #222222;
@@ -79,13 +80,16 @@ html {
 }
 
 #book a {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-size: var(--font-size-small);
     color: var(--color-olive);
 
     border-radius: 8px;
     padding: 12px;
     box-shadow: var(--neomorph-tall-small);
+    text-decoration: none;
 }
 
 #book a:hover {

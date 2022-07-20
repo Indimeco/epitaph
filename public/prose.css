@@ -1,5 +1,5 @@
 .prose h1 {
-    font-weight: bold;
+    color: var(--color-dark-sienna);
     margin-bottom: 32px;
 }
 
