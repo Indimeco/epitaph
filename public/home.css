@@ -1,5 +1,5 @@
 .home__title {
-	font-size: 64px;
+	font-size: 56px;
 	color: var(--color-fg-lighter);
 	margin-bottom: 40px;
 }
@@ -20,8 +20,7 @@
 }
 
 #book .home__showcase a {
-	width: 248px;
-	height: 248px;
+	width: 100%;
 	margin-bottom: 40px;
 	box-shadow: var(--neomorph-tall-large);
 	font-size: var(--font-size-large);
@@ -31,14 +30,20 @@
 	box-shadow: var(--neomorph-deep-large);
 }
 
-@media screen and (min-width: 480px) {
+@media only screen and (min-width: 480px) {
 	.home__title {
 		font-size: 120px;
 	}
-	.home__showcase a {
-		margin-right: 40px;
+
+	.home__showcase {
 		flex-direction: row;
 		flex-wrap: wrap;
-		justify-content: flex-start;	
+		justify-content: flex-start;
+	}
+
+	.home__showcase a {
+		width: 248px;
+		height: 248px;
+		margin-right: 40px;
 	}
 }

@@ -38,6 +38,9 @@
         0 0 0 var(--color-page-highlight),
         calc(var(--neomorph-small-multiplier) * 2px) calc(var(--neomorph-small-multiplier) * 2px) calc(var(--neomorph-small-multiplier) * 3px) var(--color-page-shadow) inset,
         calc(var(--neomorph-small-multiplier) * -2px) calc(var(--neomorph-small-multiplier) * -2px) calc(var(--neomorph-small-multiplier) * 2px) var(--color-page-highlight) inset;
+
+
+    --nav-control-width: 40px;
 }
 
 /* BODY */
@@ -76,7 +79,7 @@ html {
     padding: 64px;
     margin-top: 64px;
     margin-bottom: 64px;
-
+    padding-right: calc(64px - var(--nav-control-width));
 }
 
 #book a {
@@ -149,7 +152,7 @@ html {
 }
 
 .nav__control__context {
-    width: 40px;
+    width: var(--nav-control-width);
     padding: 8px;
     height: 100%;
     display: flex;
@@ -205,5 +208,11 @@ html {
     .nav__body a:hover,
     .nav__body a:focus {
         text-underline-offset: 4px;
+    }
+}
+
+@media only screen and (min-width: 480px) {
+    #book {
+        padding-right: 64px;
     }
 }
