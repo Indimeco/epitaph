@@ -11,7 +11,5 @@ poems:
 - 2021-08-02
 ---
 
-When I was fifteen, I created a collection to be a mosaic of myself and my central thoughts. I called it "repertoire & epitaph". 
-
-None of the original poems remain in the collection.
+Self-reflection, mosaic.
 

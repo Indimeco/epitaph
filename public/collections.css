@@ -12,7 +12,7 @@
     box-shadow: var(--neomorph-tall-large);
     cursor: pointer;
     width: 100%;
-    margin-bottom: 32px;
+    margin-bottom: 64px;
 
     transition: box-shadow 0.1s ease-in-out;
 }
@@ -34,6 +34,7 @@
 .collections__tile__header {
     display: flex;
     justify-content: space-between;
+    margin-bottom: 16px;
 }
 
 .collections__tile__header__date {
@@ -43,6 +44,10 @@
 /* TILE MARKDOWN */
 .collections__tile__content p {
     font-size: var(--font-size-small);
+}
+
+.collections__tile__content p~p {
+    margin-top: 8px;
 }
 
 /* TILE POEMS */

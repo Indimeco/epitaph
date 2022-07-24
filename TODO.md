@@ -1,7 +1,7 @@
 # v1
 
 SECTION Dev
-TODO add preview of poems on collection page
+TODO add title of poems on collection page
 
 SECTION Design
 TODO page meta (favico, title, etc)
