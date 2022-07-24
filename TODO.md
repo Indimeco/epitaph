@@ -2,13 +2,10 @@
 
 SECTION Dev
 TODO add preview of poems on collection page
-TODO index page with about
 
 SECTION Design
 TODO page meta (favico, title, etc)
 
-SECTION Content
-TODO collection organisation
 
 SECTION Ops
 TODO not found page

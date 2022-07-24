@@ -1,13 +1,17 @@
 ---
 title: repertoire
-poems: 
-- 2021-04-05 
-- 2021-05-30 
-- 2021-12-26
-created: 2022-06-11
+created: 2022-07-24
+poems:
+- 2021-05-30
+- 2021-04-05
+- 2019-05-29
+- 2019-04-11
+- 2020-05-20
+- 2021-12-16
+- 2021-08-02
 ---
 
-Something about this
+When I was fifteen, I created a collection to be a mosaic of myself and my central thoughts. I called it "repertoire & epitaph". 
 
-Something else
+None of the original poems remain in the collection.
 
