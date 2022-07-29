@@ -19,7 +19,7 @@ import Shared
 import Util.CollectionData exposing (CollectionData, collections)
 import Util.Error exposing (errorMessage)
 import Util.Poem exposing (PoemNode(..))
-import Util.PoemData exposing (poemUrl)
+import Util.PoemData exposing (getPoem, poemUrl)
 import View exposing (View)
 
 
@@ -56,10 +56,6 @@ type alias RouteParams =
     {}
 
 
-type alias Data =
-    List CollectionData
-
-
 page : PageWithState RouteParams Data Model Msg
 page =
     Page.single
@@ -69,9 +65,53 @@ page =
         |> Page.buildWithLocalState { view = view, init = init, subscriptions = subscriptions, update = update }
 
 
+type alias TitledPoem =
+    { title : Maybe String, date : String }
+
+
+type alias CollectionDataWithPoem =
+    { title : String
+    , body : String
+    , id : String
+    , poems : List TitledPoem
+    , date : String
+    }
+
+
+type alias Data =
+    List CollectionDataWithPoem
+
+
 data : DataSource Data
 data =
     collections
+        |> DataSource.map
+            (List.map
+                (\c ->
+                    let
+                        ps =
+                            Array.map
+                                (\x ->
+                                    getPoem x
+                                        |> DataSource.map (\p -> { title = p.title, date = p.date })
+                                )
+                                c.poems
+                                |> Array.toList
+                                |> DataSource.combine
+                    in
+                    DataSource.map
+                        (\x ->
+                            { title = c.title
+                            , date = c.date
+                            , body = c.body
+                            , id = c.id
+                            , poems = x
+                            }
+                        )
+                        ps
+                )
+            )
+        |> DataSource.resolve
 
 
 head :
@@ -116,7 +156,7 @@ deadEndsToString deadEnds =
         |> String.join "\n"
 
 
-collectionTile : CollectionData -> String -> Html Msg
+collectionTile : CollectionDataWithPoem -> String -> Html Msg
 collectionTile { id, body, date, poems, title } selectedCollection =
     let
         selectedClass =
@@ -139,5 +179,14 @@ collectionTile { id, body, date, poems, title } selectedCollection =
                 |> Result.withDefault [ errorMessage ]
             )
         , Html.ol [ Html.Attributes.class "collections__tile__poems" ] <|
-            List.map (\p -> Html.li [] [ Html.a [ Html.Attributes.href <| poemUrl id p ] [ Html.text p ] ]) (Array.toList poems)
+            List.map
+                (\p ->
+                    Html.li []
+                        [ Html.a [ Html.Attributes.href <| poemUrl id p.date ]
+                            [ Html.text <|
+                                Maybe.withDefault p.date p.title
+                            ]
+                        ]
+                )
+                poems
         ]

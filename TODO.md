@@ -1,11 +1,9 @@
 # v1
 
 SECTION Dev
-TODO add title of poems on collection page
 
 SECTION Design
 TODO page meta (favico, title, etc)
-
 
 SECTION Ops
 TODO not found page
