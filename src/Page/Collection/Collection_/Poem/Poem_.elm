@@ -4,7 +4,7 @@ import Array exposing (Array)
 import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo
-import Html exposing (Html, a, div, h2, section, text)
+import Html exposing (Html, a, div, h2, section, span, text)
 import Html.Attributes exposing (class, href)
 import List exposing (map)
 import Page exposing (Page, StaticPayload)
@@ -144,7 +144,7 @@ prevNextLink : String -> String -> Maybe String -> Html msg
 prevNextLink txt collectionId link =
     case link of
         Nothing ->
-            a [ class "poem__prevnext__link poem__prevnext__link--disabled" ] [ text txt ]
+            span [ class "poem__prevnext__link--disabled" ] [ text txt ]
 
         Just x ->
             a [ class "poem__prevnext__link", href <| poemUrl collectionId x ] [ text txt ]

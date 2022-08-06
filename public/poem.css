@@ -37,13 +37,18 @@
     justify-content: flex-end;
 }
 
-.poem__prevnext__link.poem__prevnext__link--disabled {
+.poem__prevnext__link--disabled {
     cursor: not-allowed;
     color: var(--color-fg-lighter);
+    padding: 12px;
+    font-size: var(--font-size-small);
 }
 
 .poem__prevnext__link {
     cursor: pointer;
-    margin-right: 16px;
     text-decoration: none;
+}
+
+.poem__prevnext__link:first-child {
+    margin-right: 16px;
 }
