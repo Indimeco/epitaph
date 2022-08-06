@@ -1,6 +1,14 @@
 .prose h1 {
     color: var(--color-dark-sienna);
+    font-weight: bold;
     margin-bottom: 32px;
+}
+
+.prose h2 {
+    color: var(--color-olive);
+    font-weight: bold;
+    margin-bottom: 24px;
+    margin-top: 40px;
 }
 
 .prose p {
@@ -10,4 +18,8 @@
 
 .prose *~h1 {
     margin-top: 56px;
+}
+
+#book .prose a {
+    font-size: var(--font-size-body);
 }

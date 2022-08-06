@@ -3,7 +3,7 @@ module Page.Index exposing (Data, Model, Msg, page)
 import DataSource exposing (DataSource)
 import Head
 import Head.Seo as Seo
-import Html exposing (Html, p, a, b, div, h1, section, text)
+import Html exposing (Html, a, b, div, h1, p, section, text)
 import Html.Attributes exposing (class, href)
 import OptimizedDecoder exposing (Decoder)
 import Page exposing (Page, PageWithState, StaticPayload)
@@ -71,15 +71,16 @@ view :
 view maybeUrl sharedModel static =
     { title = "home"
     , body =
-        [ section [ class "home"] [
-         h1 [ class "home__title" ]
-            [ text "Epitaph" ]
-        , p
-            [ class "home__subtitle" ]
-            [ text "Something" ]
-        , section [ class "home__showcase" ] [ 
-           a [ href "/collections" ] [ text "collections" ],
-           a [ href "/about" ] [ text "about" ]
-           ]
-        ]]
+        [ section [ class "home" ]
+            [ h1 [ class "home__title" ]
+                [ text "Epitaph" ]
+            , p
+                [ class "home__subtitle" ]
+                [ text "Written word collections by Jacob Lawrence" ]
+            , section [ class "home__showcase" ]
+                [ a [ href "/collections" ] [ text "collections" ]
+                , a [ href "/about" ] [ text "about" ]
+                ]
+            ]
+        ]
     }
