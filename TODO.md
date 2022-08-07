@@ -1,9 +1,9 @@
 # v1
 
 SECTION Dev
+TODO Page titles/head across pages
 
 SECTION Design
-TODO page meta (favico, title, etc)
 
 SECTION Ops
 TODO not found page
