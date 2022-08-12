@@ -1,13 +1,24 @@
-module Site exposing (config)
+module Site exposing (config, getSiteHead, pageTitle, siteDescription, siteName)
 
 import DataSource
 import Head
+import Head.Seo
 import MimeType exposing (MimeImage(..))
-import Pages.Manifest as Manifest exposing (DisplayMode)
+import Pages.Manifest as Manifest
 import Pages.Url
-import Path exposing (Path)
+import Path
 import Route
 import SiteConfig exposing (SiteConfig)
+
+
+siteName : String
+siteName =
+    "epitaph"
+
+
+siteDescription : String
+siteDescription =
+    "words written by Jacob Lawrence"
 
 
 type alias Data =
@@ -17,8 +28,6 @@ type alias Data =
 config : SiteConfig Data
 config =
     { data = data
-
-    -- FIXME elm pages metadata
     , canonicalUrl = ""
     , manifest = manifest
     , head = head
@@ -49,8 +58,8 @@ head static =
 manifest : Data -> Manifest.Config
 manifest static =
     Manifest.init
-        { name = "Epitaph"
-        , description = "Jacob Lawrence | Epitaph"
+        { name = siteName
+        , description = siteDescription
         , startUrl = Route.Index |> Route.toPath
         , icons =
             [ Manifest.Icon
@@ -65,3 +74,26 @@ manifest static =
                 [ Manifest.IconPurposeAny ]
             ]
         }
+
+
+pageTitle : String -> String
+pageTitle title =
+    siteName ++ " | " ++ title
+
+
+getSiteHead : String -> List Head.Tag
+getSiteHead title =
+    Head.Seo.summary
+        { canonicalUrlOverride = Nothing
+        , siteName = siteName
+        , image =
+            { url = Pages.Url.external "/mstile-310x310.png"
+            , alt = "epitaph logo"
+            , dimensions = Just { width = 310, height = 310 }
+            , mimeType = Just "png"
+            }
+        , description = siteDescription
+        , locale = Nothing
+        , title = pageTitle title
+        }
+        |> Head.Seo.website

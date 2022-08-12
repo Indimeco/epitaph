@@ -11,9 +11,10 @@ import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Shared
+import Site exposing (getSiteHead, pageTitle)
 import Util.CollectionData exposing (collections, getCollection)
 import Util.Poem exposing (..)
-import Util.PoemData exposing (getPoem, poemUrl, poems)
+import Util.PoemData exposing (getPoem, poemUrl)
 import View exposing (View)
 
 
@@ -102,22 +103,8 @@ head :
     StaticPayload Data RouteParams
     -> List Head.Tag
 head static =
-    Seo.summary
-        { canonicalUrlOverride = Nothing
-        , siteName = "repertoire"
-        , image =
-            { url = Pages.Url.external "TODO"
-            , alt = "epitaph logo"
-            , dimensions = Nothing
-            , mimeType = Nothing
-            }
-        , description = "TODO"
-        , locale = Nothing
-
-        -- REVIEW what's the best way to share titles
-        , title = "epitaph | " ++ Maybe.withDefault static.data.date static.data.title
-        }
-        |> Seo.website
+    Maybe.withDefault static.data.date static.data.title
+        |> getSiteHead
 
 
 view :
@@ -126,7 +113,7 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel static =
-    { title = "epitaph | " ++ Maybe.withDefault static.data.date static.data.title
+    { title = pageTitle <| Maybe.withDefault static.data.date static.data.title
     , body =
         [ div [ class "poem" ]
             [ div [ class "poem__prevnext" ]

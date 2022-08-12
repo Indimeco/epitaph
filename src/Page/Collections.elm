@@ -16,6 +16,7 @@ import Pages.PageUrl exposing (PageUrl)
 import Pages.Url
 import Path exposing (Path)
 import Shared
+import Site exposing (getSiteHead, pageTitle)
 import Util.CollectionData exposing (CollectionData, collections)
 import Util.Error exposing (errorMessage)
 import Util.Poem exposing (PoemNode(..))
@@ -118,20 +119,7 @@ head :
     StaticPayload Data RouteParams
     -> List Head.Tag
 head static =
-    Seo.summary
-        { canonicalUrlOverride = Nothing
-        , siteName = "epitaph"
-        , image =
-            { url = Pages.Url.external "TODO"
-            , alt = "epitaph logo"
-            , dimensions = Nothing
-            , mimeType = Nothing
-            }
-        , description = "TODO"
-        , locale = Nothing
-        , title = "TODO title" -- metadata.title -- TODO
-        }
-        |> Seo.website
+    getSiteHead "collections"
 
 
 view :
@@ -141,7 +129,7 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel model static =
-    { title = "test"
+    { title = pageTitle <| "collections"
     , body =
         [ Html.h1 [ Html.Attributes.class "collection__heading" ]
             [ Html.text "Collections" ]

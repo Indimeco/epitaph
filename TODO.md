@@ -1,7 +1,6 @@
 # v1
 
 SECTION Dev
-TODO Page titles/head across pages
 
 SECTION Design
 

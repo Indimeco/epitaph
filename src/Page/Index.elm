@@ -2,14 +2,12 @@ module Page.Index exposing (Data, Model, Msg, page)
 
 import DataSource exposing (DataSource)
 import Head
-import Head.Seo as Seo
-import Html exposing (Html, a, b, div, h1, p, section, text)
+import Html exposing (a, h1, p, section, text)
 import Html.Attributes exposing (class, href)
-import OptimizedDecoder exposing (Decoder)
-import Page exposing (Page, PageWithState, StaticPayload)
+import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
-import Pages.Url
 import Shared
+import Site exposing (getSiteHead, pageTitle)
 import View exposing (View)
 
 
@@ -47,20 +45,7 @@ head :
     StaticPayload Data RouteParams
     -> List Head.Tag
 head static =
-    Seo.summary
-        { canonicalUrlOverride = Nothing
-        , siteName = "epitaph"
-        , image =
-            { url = Pages.Url.external "TODO"
-            , alt = "epitaph logo"
-            , dimensions = Nothing
-            , mimeType = Nothing
-            }
-        , description = "TODO"
-        , locale = Nothing
-        , title = "TODO title" -- metadata.title -- TODO
-        }
-        |> Seo.website
+    getSiteHead "home"
 
 
 view :
@@ -69,14 +54,14 @@ view :
     -> StaticPayload Data RouteParams
     -> View Msg
 view maybeUrl sharedModel static =
-    { title = "home"
+    { title = pageTitle "home"
     , body =
         [ section [ class "home" ]
             [ h1 [ class "home__title" ]
-                [ text "Epitaph" ]
+                [ text Site.siteName ]
             , p
                 [ class "home__subtitle" ]
-                [ text "Written word collections by Jacob Lawrence" ]
+                [ text Site.siteDescription ]
             , section [ class "home__showcase" ]
                 [ a [ href "/collections" ] [ text "collections" ]
                 , a [ href "/about" ] [ text "about" ]
