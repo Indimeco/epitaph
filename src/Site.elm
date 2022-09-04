@@ -28,7 +28,7 @@ type alias Data =
 config : SiteConfig Data
 config =
     { data = data
-    , canonicalUrl = ""
+    , canonicalUrl = "https://indimeco.github.io/epitaph/"
     , manifest = manifest
     , head = head
     }
