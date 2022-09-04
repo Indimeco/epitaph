@@ -16,29 +16,47 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Setup Elm
-        uses: justgook/setup-elm@1.2.0
-        with:
-          elm-version: 0.19.1
-      - name: Run tests
-        run: elm-test
-
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v3
+
       - name: Setup Node.js environment
         uses: actions/setup-node@v3.4.1
         with: 
           node-version: '17.x'
 
+      - name: Cache node_modules
+        id: cache-node_modules
+        uses: actions/cache@v3
+        with:
+          path: './node_modules'
+          key: node_modules-${{ hashFiles('./package.json', './package-lock.json') }}
+
+      - name: Cache ~/.elm
+        uses: actions/cache@v3
+        with:
+          path: ~/.elm
+          key: elm-${{ hashFiles('./elm.json', './elm-tooling.json') }}
+
+      - name: npm ci
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        env:
+          NO_ELM_TOOLING_INSTALL: 1
+        run: npm ci
+
+      - name: elm-tooling install
+        run: npx --no elm-tooling install
+
+      - name: test
+        run: npx --no elm-test
+
       - name: run build
         run: npm run build
 
   deploy:
-    needs: [test, build]
+    needs: build
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
