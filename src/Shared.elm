@@ -11,6 +11,7 @@ import Pages.PageUrl exposing (PageUrl)
 import Path exposing (Path)
 import Route exposing (Route)
 import SharedTemplate exposing (SharedTemplate)
+import Util.Data exposing (relativeUrl)
 import View exposing (View)
 
 
@@ -123,12 +124,12 @@ view sharedData page model toMsg pageView =
                 ]
             , Html.nav [ Html.Attributes.class "nav", Html.Attributes.class navActiveClass ]
                 [ Html.div [ Html.Attributes.class "nav__body" ]
-                    [ Html.a [ Html.Attributes.href "/" ]
+                    [ Html.a [ Html.Attributes.href <| relativeUrl Route.Index ]
                         [ Html.h2 [ Html.Attributes.class "nav__body__heading" ] [ Html.text "home" ]
                         ]
                     , Html.ul []
-                        [ Html.li [] [ Html.a [ Html.Attributes.href "/collections" ] [ Html.text "collections" ] ]
-                        , Html.li [] [ Html.a [ Html.Attributes.href "/about" ] [ Html.text "about" ] ]
+                        [ Html.li [] [ Html.a [ Html.Attributes.href <| relativeUrl Route.Collections ] [ Html.text "collections" ] ]
+                        , Html.li [] [ Html.a [ Html.Attributes.href <| relativeUrl Route.About ] [ Html.text "about" ] ]
                         ]
                     ]
                 ]

@@ -5,6 +5,9 @@ import DataSource exposing (..)
 import DataSource.File
 import DataSource.Glob as Glob
 import OptimizedDecoder exposing (Decoder)
+import Path
+import Route
+import Util.Data exposing (relativeUrl)
 import Util.Poem exposing (PoemNode, getTitle, markdownToPoemNodes, timestringToDate)
 
 
@@ -15,7 +18,7 @@ poemPath =
 
 poemUrl : String -> String -> String
 poemUrl collection poem =
-    "/collection/" ++ collection ++ "/poem/" ++ poem
+    Route.Collection__Collection___Poem__Poem_ { collection = collection, poem = poem } |> relativeUrl
 
 
 poemDateMetadataKey : String

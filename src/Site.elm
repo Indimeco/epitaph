@@ -9,6 +9,7 @@ import Pages.Url
 import Path
 import Route
 import SiteConfig exposing (SiteConfig)
+import Util.Data exposing (relativeUrl)
 
 
 siteName : String
@@ -41,8 +42,7 @@ data =
 
 head : Data -> List Head.Tag
 head static =
-    [ Head.sitemapLink "/sitemap.xml"
-    , Head.appleTouchIcon (Just 180) (Pages.Url.fromPath <| Path.fromString "/apple-touch-icon.png")
+    [ Head.appleTouchIcon (Just 180) (Pages.Url.fromPath <| Path.fromString "/apple-touch-icon.png")
     , Head.metaName "msapplication-TileColor" (Head.raw "#fef7e5")
     ]
 
@@ -72,6 +72,11 @@ manifest static =
                 [ ( 16, 16 ) ]
                 (Just Png)
                 [ Manifest.IconPurposeAny ]
+            , Manifest.Icon
+                (Pages.Url.fromPath <| Path.fromString "favicon.ico")
+                []
+                (Just <| OtherImage "ico")
+                [ Manifest.IconPurposeAny ]
             ]
         }
 
@@ -87,7 +92,7 @@ getSiteHead title =
         { canonicalUrlOverride = Nothing
         , siteName = siteName
         , image =
-            { url = Pages.Url.external "/mstile-310x310.png"
+            { url = Pages.Url.fromPath <| Path.fromString "/mstile-310x310.png"
             , alt = "epitaph logo"
             , dimensions = Just { width = 310, height = 310 }
             , mimeType = Just "png"

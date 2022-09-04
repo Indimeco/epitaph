@@ -6,8 +6,10 @@ import Html exposing (a, h1, p, section, text)
 import Html.Attributes exposing (class, href)
 import Page exposing (Page, StaticPayload)
 import Pages.PageUrl exposing (PageUrl)
+import Route
 import Shared
 import Site exposing (getSiteHead, pageTitle)
+import Util.Data exposing (relativeUrl)
 import View exposing (View)
 
 
@@ -63,8 +65,8 @@ view maybeUrl sharedModel static =
                 [ class "home__subtitle" ]
                 [ text Site.siteDescription ]
             , section [ class "home__showcase" ]
-                [ a [ href "/collections" ] [ text "collections" ]
-                , a [ href "/about" ] [ text "about" ]
+                [ a [ href <| relativeUrl <| Route.Collections ] [ text "collections" ]
+                , a [ href <| relativeUrl <| Route.About ] [ text "about" ]
                 ]
             ]
         ]
