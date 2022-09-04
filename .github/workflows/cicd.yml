@@ -49,11 +49,11 @@ jobs:
       - name: elm-tooling install
         run: npx --no elm-tooling install
 
-      - name: test
-        run: npx --no elm-test
-
       - name: run build
         run: npm run build
+      
+      - name: test # requires build to have run
+        run: npx elm-test # elm-test isn't included in elm-tooling and usually expects a global install :/
 
   deploy:
     needs: build
