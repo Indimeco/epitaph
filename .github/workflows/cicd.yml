@@ -53,7 +53,7 @@ jobs:
         run: npm run build
 
       - name: test # requires build to have run
-        run: npx elm-test # elm-test isn't included in elm-tooling and usually expects a global install :/
+        run: npx elm-test@0.19.1-revision7 # elm-test isn't included in elm-tooling and usually expects a global install :/
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
